@@ -1,0 +1,34 @@
+{% extends 'header.html.twig' %}
+
+{% block title %}Nos habitats{% endblock %}
+
+{% block body %}
+<div id="hero" class="hero-section">
+    <img src="{{ asset('assets/styles/images/lemurs-1010643_1280.jpg') }}" alt="Description de l'image">
+    <div class="hero-content">
+        <h1>Nos habitats</h1>
+        <p>Un habitat, au sein du Zoo d'Arcadia, est une zone écologique ou environnementale spécialement conçue pour abriter une espèce particulière d'animal, de plante ou d'un autre type d'organisme. Chaque habitat reproduit la zone dans laquelle l'organisme vivrait naturellement et où il peut trouver de la nourriture, un abri, une protection et des partenaires pour la reproduction, en utilisant les caractéristiques auxquelles l'espèce s'est adaptée pour survivre. Ces habitats sont soigneusement créés pour refléter l'environnement naturel dans lequel vit l'organisme, ou l'environnement physique qui entoure une population de la faune, assurant ainsi leur bien-être et leur épanouissement au sein du zoo.</p>
+    </div>
+</div>
+
+<section id="habitats" class="habitats-section">
+    <div class="container-habitat">
+        <h2>Découvrez nos habitats</h2>
+        <div class="row mt-4">
+            {% for habitat in habitats %}
+                <div class="col-md-4 mb-4">
+                    <div class="habitat-card">
+                        <a href="{{ path('habitat_name', {'slug': habitat.slug}) }}">
+                            <img src="{{ asset(habitat.image) }}" class="card-img-top" alt="{{ habitat.name }}">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ habitat.name }}</h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% include 'footer.html.twig' %}
+{% endblock %}

@@ -1,78 +1,37 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenue au Zoo d'Arcadia</title>
-    {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('build/app.css') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oregano:ital@0;1&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
-    {% endblock %}
-    {% block javascripts %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    <script src="{{ asset('build/app.js') }}" defer></script>
-    {% endblock %}
-</head>
-<body>
-    <header id="header" class="header fixed-top">
-            <a href="/" class="logo">
-                <img src="{{ asset('assets/styles/images/logo.png') }}"  alt="Logo" class="logo-img">
-                <h1 class="sitename">Zoo d'Arcadia</h1>
-            </a>
-            <div class="container">
-            <nav id="navbar" class="navbar">
-                <ul>
-                    <li><a href="#" class="active">Accueil</a></li>
-                    <li><a href="#">Nos services</a></li>
-                    <li><a href="#">Nos habitats et animaux</a></li>
-                    <li><a href="#">Contact</a></li>
-                    <li><a href="#">Connexion</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+{% extends 'header.html.twig' %}
 
-    <div id="hero" class="hero-section">
-        <img src="{{ asset('assets/styles/images/pixabay_1660044.png') }}" alt="Description de l'image">
-        <div class="hero-content">
-            <h1>Bienvenue sur le site du zoo d’Arcadia</h1>
-        </div>
+{% block title %}Bienvenue au Zoo d'Arcadia{% endblock %}
 
+{% block body %}
+<div id="hero" class="hero-section">
+  <img src="{{ asset('assets/styles/images/pixabay_1660044.png') }}" alt="Description de l'image">
+  <div class="hero-content">
+      <h1>Bienvenue sur le site du zoo d’Arcadia</h1>
+  </div>
+</div>
 
-    </div>
-    <section id="about" class="about section">
-      <div class="container-about">
-        <div class="content-wrapper">
-          <div class="about-img-container">
-            <img src="{{ asset('assets/styles/images/pixabay_3503779.png') }}" class="about-img" alt="Découvrez nos animaux">
-          </div>
-          <a href="#" class="cta-button">Découvrez nos animaux</a>
-          <div class="about-text-container">
-            <h3>Nos animaux</h3>
-            <p>Venez rencontrer nos animaux fascinants ! Du majestueux lion aux gracieux flamants roses, notre zoo abrite une variété impressionnante d'espèces, chacune avec son propre caractère et ses habitudes uniques. Nos soigneurs passionnés s’assurent que chaque animal bénéficie d'un environnement stimulant et adapté à ses besoins. Explorez nos enclos et apprenez-en plus sur ces créatures incroyables lors de vos visites !</p>
-          </div>
-        </div>
+<section id="about-animals" class="about section">
+  <div class="container-about">
+    <div class="content-wrapper">
+      <div class="about-img-container">
+        <img src="{{ asset('assets/styles/images/pixabay_3503779.png') }}" class="about-img" alt="Découvrez nos animaux">
       </div>
-    </section>
+      <a href="#" class="cta-button">Découvrez nos animaux</a>
+      <div class="about-text-container">
+        <h3>Nos animaux</h3>
+        <p>Venez rencontrer nos animaux fascinants ! Du majestueux lion aux gracieux flamants roses, notre zoo abrite une variété impressionnante d'espèces, chacune avec son propre caractère et ses habitudes uniques. Nos soigneurs passionnés s’assurent que chaque animal bénéficie d'un environnement stimulant et adapté à ses besoins. Explorez nos enclos et apprenez-en plus sur ces créatures incroyables lors de vos visites !</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-
-<section id="about" class="about section">
+<section id="about-habitats" class="about section">
   <div class="container-about">
     <div class="content-wrapper reverse">
       <div class="about-img-container">
         <img src="{{ asset('assets/styles/images/elefant.jpg') }}" class="about-img" alt="Découvrez nos habitats">
       </div>
-      <a href="#" class="cta-button">Découvrez nos habitats</a>
+      <a href="{{ path('habitat') }}" class="cta-button">Découvrez nos habitats</a>
       <div class="about-text-container">
         <h3>Nos habitats</h3>
         <p>Nous avons créé des habitats naturels pour nos animaux afin qu'ils se sentent chez eux ! Chaque espace est conçu pour refléter l'environnement naturel des espèces que nous accueillons, avec des zones de repos, des points d'eau et des installations pour le jeu et l'exploration. Venez découvrir ces écosystèmes variés et admirez comment nous avons recréé des habitats authentiques pour le bien-être de nos animaux.</p>
@@ -81,7 +40,7 @@
   </div>
 </section>
 
-<section id="about" class="about section">
+<section id="about-services" class="about section">
   <div class="container-about">
     <div class="content-wrapper">
       <div class="about-img-container">
@@ -91,72 +50,67 @@
       <div class="about-text-container">
         <h3>Nos services</h3>
         <p>Nous offrons une gamme de services pour rendre votre visite inoubliable ! Profitez de nos visites guidées, assistez à des présentations éducatives et participez à des activités pour toute la famille. Notre boutique propose des souvenirs uniques et notre café vous invite à déguster de délicieux en-cas. Venez vivre une expérience enrichissante et amusante au zoo !</p>
-        
       </div>
     </div>
   </div>
 </section>
+
 <section class="testimonials">
   <div class="testimonial-container">
-      <div class="row">
-          <div class="col-md-8 col-center m-auto">
-              <h2>Nos avis</h2>
-              <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                  <div class="carousel-inner">
-                      <div class="carousel-item active">
-                          <div class="img-box">
-                            <img src="https://i.ibb.co/d5DY64w/img1.jpg" alt="Jennifer Smith">
-                          </div>
-                          <p class="testimonial">« Un lieu fantastique pour toute la famille ! Le zoo est très bien entretenu et les animaux semblent heureux. Nous avons passé une journée merveilleuse à découvrir toutes les espèces et à participer aux activités proposées. Je recommande vivement ! »</p>
-                          <div class="stars">
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star"></span>
-                          </div>
-                      </div>
-                      <div class="carousel-item">
-                          <div class="img-box">
-                            <img src="https://i.ibb.co/5FF1vqz/img2.jpg" alt="Dauglas McNun">
-                          </div>
-                          <p class="testimonial">« Très bon zoo avec une grande variété d'animaux. Les enclos sont spacieux et bien conçus, ce qui rend la visite très agréable. Le seul bémol, c’est le prix d’entrée un peu élevé, mais ça vaut le coup ! »</p>
-                          <div class="stars">
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star"></span>
-                            <span class="fa fa-star"></span>
-                          </div>
-                      </div>
-                      <div class="carousel-item">
-                          <div class="img-box">
-                            <img src="https://i.ibb.co/Trv7hDv/img3.jpg" alt="Hellen Wright">
-                          </div>
-                          <p class="testimonial">« Un très beau zoo avec un large choix d’animaux exotiques et locaux. Le parc est bien aménagé et offre de nombreux espaces pour se reposer. J'ai adoré les présentations des soigneurs et les activités pédagogiques pour les enfants. »</p>
-                          <div class="stars">
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                          </div>
-                      </div>
-                  </div>
-                  <ol class="carousel-indicators">
-                      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                      <li data-target="#myCarousel" data-slide-to="1"></li>
-                      <li data-target="#myCarousel" data-slide-to="2"></li>
-                  </ol>
+    <div class="row">
+      <div class="col-md-8 col-center m-auto">
+        <h2>Nos avis</h2>
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="img-box">
+                <img src="https://i.ibb.co/d5DY64w/img1.jpg" alt="Jennifer Smith">
               </div>
+              <p class="testimonial">« Un lieu fantastique pour toute la famille ! Le zoo est très bien entretenu et les animaux semblent heureux. Nous avons passé une journée merveilleuse à découvrir toutes les espèces et à participer aux activités proposées. Je recommande vivement ! »</p>
+              <div class="stars">
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="img-box">
+                <img src="https://i.ibb.co/5FF1vqz/img2.jpg" alt="Dauglas McNun">
+              </div>
+              <p class="testimonial">« Très bon zoo avec une grande variété d'animaux. Les enclos sont spacieux et bien conçus, ce qui rend la visite très agréable. Le seul bémol, c’est le prix d’entrée un peu élevé, mais ça vaut le coup ! »</p>
+              <div class="stars">
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="img-box">
+                <img src="https://i.ibb.co/Trv7hDv/img3.jpg" alt="Hellen Wright">
+              </div>
+              <p class="testimonial">« Un très beau zoo avec un large choix d’animaux exotiques et locaux. Le parc est bien aménagé et offre de nombreux espaces pour se reposer. J'ai adoré les présentations des soigneurs et les activités pédagogiques pour les enfants. »</p>
+              <div class="stars">
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+              </div>
+            </div>
           </div>
+          <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+          </ol>
+        </div>
       </div>
+    </div>
   </div>
 </section>
-
-
-
-
-
-</body>
-</html>
+{% include 'footer.html.twig' %}
+{% endblock %}

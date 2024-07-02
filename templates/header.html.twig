@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bienvenue au Zoo d'Arcadia{% endblock %}</title>
+    {% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('build/app.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oregano:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% endblock %}
+</head>
+<body>
+    <header id="header" class="header fixed-top">
+        <a href="{{ path('Accueil') }}" class="logo">
+            <img src="{{ asset('assets/styles/images/logo.png') }}" alt="Logo" class="logo-img">
+            <h1 class="sitename">Zoo d'Arcadia</h1>
+        </a>
+        <div class="container">
+            <nav id="navbar" class="navbar">
+                <ul>
+                    <li><a href="{{ path('Accueil') }}" class="{{ app.request.attributes.get('_route') == 'home' ? 'active' : '' }}">Accueil</a></li>
+                    <li><a href=# class="{{ app.request.attributes.get('_route') == 'services' ? 'active' : '' }}">Nos services</a></li>
+                    <li><a href="{{ path('habitat') }}" class="{{ app.request.attributes.get('_route') == 'habitats' ? 'active' : '' }}">Nos habitats et animaux</a></li>
+                    <li><a href=# class="{{ app.request.attributes.get('_route') == 'contact' ? 'active' : '' }}">Contact</a></li>
+                    <li><a href=# class="{{ app.request.attributes.get('_route') == 'login' ? 'active' : '' }}">Connexion</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        {% block body %}{% endblock %}
+    </main>
+    {% block javascripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="{{ asset('build/app.js') }}" defer></script>
+    {% endblock %}
+</body>
+</html>

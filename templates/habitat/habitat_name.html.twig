@@ -1,0 +1,67 @@
+{# templates/habitat_name.html.twig #}
+{% extends 'header.html.twig' %}
+
+{% block title %}{{ habitat.name }}{% endblock %}
+
+{% block body %}
+<div class="habitat-detail">
+    <div class="hero-section">
+        <img src="{{ asset(habitat.image) }}" alt="{{ habitat.name }}" class="img-fluid">
+        <div class="hero-content">
+            <h1>{{ habitat.name }}</h1>
+            <p>{{ habitat.description }}</p>
+        </div>
+    </div>
+    <h2>Les animaux de cet habitat :</h2>
+        <div class="row">
+            {% if habitat.name == 'Savane Africaine' %}
+                <div class="col-md-4">
+                    <div class="animal-card">
+                        <img src="{{ asset('assets/styles/images/animals/lion.jpg') }}" alt="Lion" class="animal-image">
+                        <h3>Lion</h3>
+                        <p>Le lion est un grand prédateur vivant dans les savanes africaines.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="animal-card">
+                        <img src="{{ asset('assets/styles/images/animals/elephant.jpg') }}" alt="Éléphant" class="animal-image">
+                        <h3>Éléphant</h3>
+                        <p>L'éléphant est le plus grand mammifère terrestre vivant dans les savanes.</p>
+                    </div>
+                </div>
+            {% elseif habitat.name == 'Forêt Tropicale' %}
+                <div class="col-md-4">
+                    <div class="animal-card">
+                        <img src="{{ asset('assets/styles/images/animals/tiger.jpg') }}" alt="Tigre" class="animal-image">
+                        <h3>Tigre</h3>
+                        <p>Le tigre est un grand félin vivant dans les forêts tropicales.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="animal-card">
+                        <img src="{{ asset('assets/styles/images/animals/sloth.jpg') }}" alt="Paresseux" class="animal-image">
+                        <h3>Paresseux</h3>
+                        <p>Le paresseux est un animal lent vivant dans les forêts tropicales.</p>
+                    </div>
+                </div>
+            {% elseif habitat.name == 'Île' %}
+                <div class="col-md-4">
+                    <div class="animal-card">
+                        <img src="{{ asset('assets/styles/images/animals/galapagos-tortoise.jpg') }}" alt="Tortue des Galápagos" class="animal-image">
+                        <h3>Tortue des Galápagos</h3>
+                        <p>La tortue des Galápagos est une espèce endémique des îles Galápagos.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="animal-card">
+                        <img src="{{ asset('assets/styles/images/animals/kiwi.webp') }}" alt="Kiwi" class="animal-image">
+                        <h3>Kiwi</h3>
+                        <p>Le kiwi est un oiseau endémique de Nouvelle-Zélande.</p>
+                    </div>
+                </div>
+            {% endif %}
+            <!-- Vous pouvez ajouter d'autres habitats et animaux ici -->
+        </div>
+</div>
+{% include 'footer.html.twig' %}
+{% endblock %}
