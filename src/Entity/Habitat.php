@@ -18,8 +18,9 @@ class Habitat
     #[ORM\Column(type: 'string', length: 50)]
     private $nom;
 
-    #[ORM\Column(type: 'string', length: 50)]
+    #[ORM\Column(type: 'text')]
     private $description;
+
 
     #[ORM\Column(type: 'string', length: 50)]
     private $commentaire_habitat;
@@ -29,6 +30,7 @@ class Habitat
 
     #[ORM\ManyToMany(targetEntity: Image::class, mappedBy: 'habitats')]
     private Collection $images;
+
 
     public function __construct()
     {
@@ -52,6 +54,12 @@ class Habitat
         return $this;
     }
 
+    // Cette méthode renverra le chemin relatif à partir du répertoire public
+    public function getImagePath(): ?string
+    {
+        // Remplacez 'assets/styles/images/habitats/' par le chemin d'accès aux images
+        return 'assets/styles/images/habitats/' . $this->habitat_id . '.jpg';
+    }
     public function getDescription(): ?string
     {
         return $this->description;
@@ -79,7 +87,7 @@ class Habitat
     /**
      * @return Collection<int, Animal>
      */
-    public function getAnimaux(): Collection
+    public function getAnimal(): Collection
     {
         return $this->animaux;
     }
@@ -132,4 +140,5 @@ class Habitat
 
         return $this;
     }
+
 }

@@ -24,9 +24,9 @@ class Animal
     #[ORM\OneToMany(mappedBy: 'animal', targetEntity: RapportVeterinaire::class)]
     private $rapportsVeterinaires;
 
-    #[ORM\OneToOne(inversedBy: 'animal', targetEntity: Race::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name: 'race_id', referencedColumnName: 'race_id')]
-    private $race;
+    #[ORM\ManyToOne(targetEntity: Race::class)]
+    #[ORM\JoinColumn(nullable: false, name: 'race_id', referencedColumnName: 'race_id')]
+    private ?Race $race = null;
 
     #[ORM\ManyToOne(targetEntity: Habitat::class, inversedBy: 'animaux')]
     #[ORM\JoinColumn(name: 'habitat_id', referencedColumnName: 'habitat_id', nullable: false)]
@@ -36,7 +36,6 @@ class Animal
         $this->rapportsVeterinaires = new ArrayCollection();
     }
 
-    // Getters et Setters...
 
     public function getAnimalId(): ?int
     {
@@ -109,6 +108,11 @@ class Animal
         return $this;
     }
 
+    public function getRaceName():string
+    {
+        return $this->race ? $this->race->getLabel() : '';
+    }
+
     public function getHabitat(): ?Habitat
     {
         return $this->habitat;
@@ -119,5 +123,11 @@ class Animal
         $this->habitat = $habitat;
 
         return $this;
+    }
+
+    public function getImagePath(): string
+    {
+        // Supposons que l'image est stockée sous le format 'assets/styles/images/animals/{slug}.jpg'
+        return 'assets/styles/images/animals/' . $this->animal_id . '.jpg';
     }
 }

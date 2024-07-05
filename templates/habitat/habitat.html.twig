@@ -1,3 +1,4 @@
+{# templates/habitat/habitat.html.twig #}
 {% extends 'header.html.twig' %}
 
 {% block title %}Nos habitats{% endblock %}
@@ -19,10 +20,10 @@
                 <div class="col-md-4 mb-4">
                     <div class="habitat-card">
                         <a href="{{ path('habitat_name', {'slug': habitat.slug}) }}">
-                            <img src="{{ asset(habitat.image) }}" class="card-img-top" alt="{{ habitat.name }}">
+                            <img src="{{ asset(habitat.getImagePath()) }}" class="card-img-top" alt="{{ habitat.nom }}">
                         </a>
                         <div class="card-body">
-                            <h5 class="card-title">{{ habitat.name }}</h5>
+                            <h5 class="card-title">{{ habitat.nom }}</h5>
                         </div>
                     </div>
                 </div>

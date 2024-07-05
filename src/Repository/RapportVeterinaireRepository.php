@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\RapportVétérinaire;
+use App\Entity\RapportVeterinaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,7 +18,7 @@ class RapportVétérinaireRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, RapportVétérinaire::class);
+        parent::__construct($registry, RapportVeterinaire::class);
     }
 
 //    /**

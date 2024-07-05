@@ -21,6 +21,9 @@ class Avis
     #[ORM\Column(type: 'boolean')]
     private bool $isVisible = false;
 
+    #[ORM\Column(type: 'integer')]
+    private $note;
+
     public function getAvisId(): ?int
     {
         return $this->avis_id;
@@ -56,6 +59,17 @@ class Avis
     public function setVisible(bool $isVisible): static
     {
         $this->isVisible = $isVisible;
+        return $this;
+    }
+
+    public function getNote(): ?int
+    {
+        return $this->note;
+    }
+
+    public function setNote(int $note): self
+    {
+        $this->note = $note;
         return $this;
     }
 }

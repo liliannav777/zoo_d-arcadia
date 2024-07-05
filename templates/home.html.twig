@@ -55,62 +55,78 @@
   </div>
 </section>
 
+
 <section class="testimonials">
   <div class="testimonial-container">
     <div class="row">
       <div class="col-md-8 col-center m-auto">
         <h2>Nos avis</h2>
+
+        {% if app.flashes('success') %}
+          <div class="alert alert-success">
+            {% for flash in app.flashes('success') %}
+              {{ flash }}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if app.flashes('error') %}
+          <div class="alert alert-danger">
+            {% for flash in app.flashes('error') %}
+              {{ flash }}
+            {% endfor %}
+          </div>
+        {% endif %}
+
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
           <div class="carousel-inner">
-            <div class="carousel-item active">
-              <div class="img-box">
-                <img src="https://i.ibb.co/d5DY64w/img1.jpg" alt="Jennifer Smith">
+            {% set visibleAvis = avisList|filter(v => v.isVisible) %}
+            {% for avis in visibleAvis %}
+              <div class="carousel-item {% if loop.first %}active{% endif %}">
+                <div class="img-box">
+                  <img src="{{ asset('assets/styles/images/default-avatar.png') }}" alt="{{ avis.pseudo }}">
+                </div>
+                <h3 class="testimonial">{{ avis.pseudo }}</h3>
+                <p class="testimonial">{{ avis.commentaire }}</p>
+                <div class="stars">
+                  {% for i in 1..5 %}
+                    <span class="fa fa-star {% if i <= avis.note %}checked{% endif %}"></span>
+                  {% endfor %}
+                </div>
               </div>
-              <p class="testimonial">« Un lieu fantastique pour toute la famille ! Le zoo est très bien entretenu et les animaux semblent heureux. Nous avons passé une journée merveilleuse à découvrir toutes les espèces et à participer aux activités proposées. Je recommande vivement ! »</p>
-              <div class="stars">
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star"></span>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <div class="img-box">
-                <img src="https://i.ibb.co/5FF1vqz/img2.jpg" alt="Dauglas McNun">
-              </div>
-              <p class="testimonial">« Très bon zoo avec une grande variété d'animaux. Les enclos sont spacieux et bien conçus, ce qui rend la visite très agréable. Le seul bémol, c’est le prix d’entrée un peu élevé, mais ça vaut le coup ! »</p>
-              <div class="stars">
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <div class="img-box">
-                <img src="https://i.ibb.co/Trv7hDv/img3.jpg" alt="Hellen Wright">
-              </div>
-              <p class="testimonial">« Un très beau zoo avec un large choix d’animaux exotiques et locaux. Le parc est bien aménagé et offre de nombreux espaces pour se reposer. J'ai adoré les présentations des soigneurs et les activités pédagogiques pour les enfants. »</p>
-              <div class="stars">
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-              </div>
-            </div>
+            {% else %}
+              <p>Aucun avis visible pour le moment.</p>
+            {% endfor %}
           </div>
           <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
+            {% for avis in visibleAvis %}
+              <li data-target="#myCarousel" data-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active"{% endif %}></li>
+            {% endfor %}
           </ol>
         </div>
+
+        <h2>Laissez votre avis</h2>
+        <form action="{{ path('submit_avis') }}" method="POST" class="form-container">
+          <div class="form-group">
+            <label for="pseudo">Votre pseudo</label>
+            <input type="text" id="pseudo" name="pseudo" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="commentaire">Votre commentaire</label>
+            <textarea id="commentaire" name="commentaire" class="form-control" rows="4" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="note">Votre note (de 1 à 5)</label>
+            <input type="number" id="note" name="note" class="form-control" min="1" max="5" required>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </section>
+
 {% include 'footer.html.twig' %}
 {% endblock %}
