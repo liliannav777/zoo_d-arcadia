@@ -54,10 +54,8 @@ class Habitat
         return $this;
     }
 
-    // Cette méthode renverra le chemin relatif à partir du répertoire public
     public function getImagePath(): ?string
     {
-        // Remplacez 'assets/styles/images/habitats/' par le chemin d'accès aux images
         return 'assets/styles/images/habitats/' . $this->habitat_id . '.jpg';
     }
     public function getDescription(): ?string

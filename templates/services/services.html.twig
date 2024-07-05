@@ -9,39 +9,25 @@
         <h1>Nos services</h1>
     </div>
 </div>
-    <div class="container-services py-5">
-        <h3>Découvrez les nombreux services proposés par le Parc Zoologique d'Arcadia.</h3>
-        <p>De la restauration pour satisfaire vos papilles à la visite guidée des habitats, offerte gratuitement, jusqu'au tour du zoo en petit train pour explorer nos installations en toute facilité. Notre parc s'efforce de fournir une expérience enrichissante et inoubliable à tous nos visiteurs.</p>
-    </div>
+<div class="container-services py-5">
+    <h3>Découvrez les nombreux services proposés par le Parc Zoologique d'Arcadia.</h3>
+    <p>De la restauration pour satisfaire vos papilles à la visite guidée des habitats, offerte gratuitement, jusqu'au tour du zoo en petit train pour explorer nos installations en toute facilité. Notre parc s'efforce de fournir une expérience enrichissante et inoubliable à tous nos visiteurs.</p>
+</div>
 <div class="container-services py-5">
     <div class="row gy-4">
-        <div class="col-12">
-            <div class="service-box d-flex align-items-center p-4">
-                <img src="{{ asset('assets/styles/images/https___s3.eu-west-3.amazonaws.com_images.zoobeauval.com_savane-2-5eda04ed14642.webp') }}"  alt="Service 1">
-                <div>
-                    <h3>Restauration</h3>
-                    <p>Profitez d'une expérience culinaire unique au cœur de notre zoo, avec notre service de restauration situé au plus près des habitats des animaux. Dégustez des plats délicieux tout en observant les animaux dans leur environnement naturel. Notre menu propose une variété de plats, allant des options végétariennes aux spécialités locales, préparées avec des ingrédients frais et de qualité. Que vous soyez en famille ou entre amis, notre espace de restauration offre une ambiance conviviale et immersive, vous permettant de savourer chaque bouchée tout en restant connecté à la faune environnante.</p>
+        {% for service in services %}
+            <div class="col-12">
+                <div class="service-box d-flex align-items-center p-4">
+                    <img src="{{ asset(service.getImagePath()) }}" alt="{{ service.nom }}">
+                    <div>
+                        <h3>{{ service.nom }}</h3>
+                        <p>{{ service.description }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-12">
-            <div class="service-box d-flex align-items-center p-4">
-                <img src="{{ asset('assets/styles/images/Safari-Train-5-e1621265313831.jpg') }}" alt="Service 2">
-                <div>
-                    <h3>Le petit train</h3>
-                    <p>Découvrez notre zoo d'une manière ludique et confortable avec notre service de petit train. Ce charmant moyen de transport vous permet de parcourir les différentes sections du zoo sans effort, tout en profitant d'une vue panoramique sur les habitats des animaux. Idéal pour les familles avec enfants ou les visiteurs souhaitant se reposer, le petit train vous emmène à travers les zones les plus emblématiques du zoo, avec des arrêts stratégiques pour observer de plus près certains animaux et prendre des photos inoubliables. Laissez-vous guider par notre petit train pour une visite relaxante et enrichissante.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="service-box d-flex align-items-center p-4">
-                <img src="{{ asset('assets/styles/images/hero-bg.jpg') }}" alt="Service 3" >
-                <div>
-                    <h3>Visite guidée des habitats</h3>
-                    <p>Ne manquez pas notre visite guidée gratuite des habitats, un service exclusif qui vous permet de découvrir les secrets de notre zoo. Accompagné par un guide expert, vous explorerez les différents habitats des animaux et apprendrez des anecdotes fascinantes sur leur comportement, leur alimentation et leurs efforts de conservation. Cette visite interactive est conçue pour toute la famille et offre une occasion unique de poser des questions et d'en savoir plus sur nos résidents animaliers. Rejoignez-nous pour une aventure éducative et engageante qui enrichira votre visite au zoo.</p>
-                </div>
-            </div>
-        </div>
+        {% else %}
+            <p>Aucun service disponible pour le moment.</p>
+        {% endfor %}
     </div>
 </div>
 {% include 'footer.html.twig' %}

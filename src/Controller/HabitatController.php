@@ -20,10 +20,10 @@ class HabitatController extends AbstractController
         ]);
     }
 
-    #[Route('/noshabitats/{slug}', name: 'habitat_name')]
-    public function detail(string $slug, HabitatRepository $habitatRepository): Response
+    #[Route('/noshabitats/{habitat_id}', name: 'habitat_name')]
+    public function detail( $habitat_id, HabitatRepository $habitatRepository): Response
     {
-        $habitat = $habitatRepository->findOneBy(['slug' => $slug]);
+        $habitat = $habitatRepository->findOneBy(['habitat_id' => $habitat_id]);
 
         if (!$habitat) {
             throw $this->createNotFoundException('Habitat not found');

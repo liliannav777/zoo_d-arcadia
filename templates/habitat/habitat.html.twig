@@ -19,7 +19,7 @@
             {% for habitat in habitats %}
                 <div class="col-md-4 mb-4">
                     <div class="habitat-card">
-                        <a href="{{ path('habitat_name', {'slug': habitat.slug}) }}">
+                        <a href="{{ path('habitat_name', {'habitat_id': habitat.habitatId}) }}">
                             <img src="{{ asset(habitat.getImagePath()) }}" class="card-img-top" alt="{{ habitat.nom }}">
                         </a>
                         <div class="card-body">
