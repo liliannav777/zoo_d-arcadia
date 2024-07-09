@@ -24,7 +24,7 @@ class Animal
     #[ORM\OneToMany(mappedBy: 'animal', targetEntity: RapportVeterinaire::class)]
     private $rapportsVeterinaires;
 
-    #[ORM\ManyToOne(targetEntity: Race::class)]
+    #[ORM\ManyToOne(targetEntity: Race::class, inversedBy: 'animal')]
     #[ORM\JoinColumn(nullable: false, name: 'race_id', referencedColumnName: 'race_id')]
     private ?Race $race = null;
 

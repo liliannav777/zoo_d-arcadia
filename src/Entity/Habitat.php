@@ -58,6 +58,8 @@ class Habitat
     {
         return 'assets/styles/images/habitats/' . $this->habitat_id . '.jpg';
     }
+
+    
     public function getDescription(): ?string
     {
         return $this->description;

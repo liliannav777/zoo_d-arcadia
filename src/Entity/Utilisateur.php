@@ -1,20 +1,24 @@
 <?php
 
+// src/Entity/Utilisateur.php
+
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur
+class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\Column(length: 50)]
     private ?string $username = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
@@ -99,9 +103,34 @@ class Utilisateur
         return $this;
     }
 
+    public function getRoles(): array
+    {
+        return [$this->role ? $this->role->getLabel() : 'ROLE_USER'];
+    }
+
+    public function getSalt(): ?string
+    {
+        // Pas nécessaire pour l'encodeur bcrypt
+        return null;
+    }
+
+    public function eraseCredentials()
+    {
+        // Si tu stockes des données temporaires, vide ici
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->username;
+    }
+
     /**
      * @return Collection<int, RapportVeterinaire>
      */
+    public function getRapportsVeterinaires(): Collection
+    {
+        return $this->rapportsVeterinaires;
+    }
 
     public function addRapportVeterinaire(RapportVeterinaire $rapportVeterinaire): static
     {

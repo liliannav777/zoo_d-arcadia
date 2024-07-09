@@ -50,10 +50,11 @@ class Service
 
     public function getImagePath(): ?string
     {
-        return 'assets/styles/images/services/' . $this->service_id . '.jpg';
+        return $this->imagePath;
     }
 
-    public function setImagePath(?string $imagePath): self
+
+public function setImagePath(?string $imagePath): self
     {
         $this->imagePath = $imagePath;
         return $this;

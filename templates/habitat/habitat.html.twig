@@ -19,11 +19,19 @@
             {% for habitat in habitats %}
                 <div class="col-md-4 mb-4">
                     <div class="habitat-card">
-                        <a href="{{ path('habitat_name', {'habitat_id': habitat.habitatId}) }}">
+                        <a href="{{ path('animal', {'habitat_id': habitat.habitatId}) }}">
                             <img src="{{ asset(habitat.getImagePath()) }}" class="card-img-top" alt="{{ habitat.nom }}">
                         </a>
                         <div class="card-body">
                             <h5 class="card-title">{{ habitat.nom }}</h5>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class="d-flex justify-content-between mt-2">
+                                    <a href="?update={{ habitat.habitatId }}" class="btn btn-warning">Modifier</a>
+                                    <form action="?delete={{ habitat.habitatId }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet habitat ?');">
+                                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                                    </form>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -31,5 +39,25 @@
         </div>
     </div>
 </section>
+
+{% if is_granted('ROLE_ADMIN') %}
+    <div class="form-container">
+        <h3>Créer un Habitat</h3>
+        {{ form_start(habitatType) }}
+            {{ form_widget(habitatType) }}
+            <button type="submit" name="create">Créer l'habitat</button>
+        {{ form_end(habitatType) }}
+    </div>
+
+    {% if habitatUpdateType %}
+        <div id="form-modification" class="form-container">
+            <h3>Modifier un Habitat</h3>
+            {{ form_start(habitatUpdateType) }}
+                {{ form_widget(habitatUpdateType) }}
+                <button type="submit" name="update">Mettre à Jour</button>
+            {{ form_end(habitatUpdateType) }}
+        </div>
+    {% endif %}
+{% endif %}
 {% include 'footer.html.twig' %}
 {% endblock %}

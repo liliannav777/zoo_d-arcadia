@@ -1,0 +1,110 @@
+{% extends 'header.html.twig' %}
+
+{% block title %}Espace Administrateur{% endblock %}
+
+{% block body %}
+<div id="hero" class="hero-section">
+    <img src="{{ asset('assets/styles/images/pixabay_1660044.png') }}" alt="Description de l'image">
+    <div class="hero-content">
+        <h1>Espace Administrateur</h1>
+    </div>
+  </div>
+  <div class="dashboard">
+    <h2>Tableau de Bord Administrateur</h2>
+
+    <!-- Formulaire de création d'utilisateur -->
+    <div class="form-container">
+        <h3>Créer un Utilisateur</h3>
+        {{ form_start(userCreationForm) }}
+            {{ form_widget(userCreationForm) }}
+        {{ form_end(userCreationForm) }}
+    </div>
+
+<!-- Formulaire de création de service -->
+<div class="form-container">
+    <h3>Créer un Service</h3>
+    {{ form_start(serviceForm) }}
+        {{ form_widget(serviceForm) }}
+        {% if not serviceUpdateForm %}
+            <button type="submit" name="create">Créer le service</button>
+        {% endif %}
+    {{ form_end(serviceForm) }}
+</div>
+
+    <!-- Liste des services avec options de mise à jour et suppression -->
+    <div class="service-list">
+        <h3>Liste des Services</h3>
+        <ul>
+            {% for service in services %}
+                <li>
+                    <strong>{{ service.nom }}</strong><br>
+                    {{ service.description }}<br>
+                    {% if service.imagePath %}
+                        <img src="{{ asset(service.imagePath) }}" alt="{{ service.nom }}" width="100"><br>
+                    {% else %}
+                    <span>Aucune image disponible</span><br>
+                    {% endif %}
+                    <a href="{{ path('admin', { update: service.serviceid }) }}#form-modification"class="btn btn-secondary">Modifier</a> |
+                    <a href="{{ path('admin', { delete: service.serviceid }) }}"class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce service ?')">Supprimer</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+<!-- Formulaire de modification de service -->
+{% if serviceUpdateForm %}
+<div id="form-modification" class="form-container">
+    <h3>Modifier un Service</h3>
+    {{ form_start(serviceUpdateForm) }}
+        {{ form_widget(serviceUpdateForm) }}
+        <button type="submit" name="update">Mettre à Jour</button>
+    {{ form_end(serviceUpdateForm) }}
+</div>
+{% endif %}
+
+    
+
+
+    <!-- Formulaire de filtrage des comptes rendus vétérinaires -->
+    <div class="form-container">
+        <h3>Filtrer les Comptes Rendus Vétérinaires</h3>
+        {{ form_start(reportFilterForm) }}
+            {{ form_widget(reportFilterForm) }}
+        {{ form_end(reportFilterForm) }}
+    </div>
+
+    <!-- Liste des comptes rendus vétérinaires -->
+    <div class="report-list">
+        <h3>Comptes Rendus Vétérinaires</h3>
+        <ul>
+            {% for report in veterinaryReports %}
+                <li>
+                    Animal: {{ report.animal.prenom }} - Date: {{ report.date|date('d/m/Y') }} - Rapport: {{ report.detail }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Tableau de bord des consultations -->
+    <div class="consultation-table">
+        <h3>Consultations par Animal</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Animal</th>
+                    <th>Nombre de Consultations</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for consultation in consultations %}
+                    <tr>
+                        <td>{{ consultation.animalName }}</td>
+                        <td>{{ consultation.consultations }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% include 'footer.html.twig' %}
+{% endblock %}

@@ -18,10 +18,18 @@
         {% for service in services %}
             <div class="col-12">
                 <div class="service-box d-flex align-items-center p-4">
-                    <img src="{{ asset(service.getImagePath()) }}" alt="{{ service.nom }}">
+                    {% if service.getImagePath() %}
+                        <img src="{{ asset(service.getImagePath()) }}" alt="{{ service.nom }}">
+                    {% else %}
+                        <img src="{{ asset('assets/styles/images/default.jpg') }}" alt="{{ service.nom }}">
+                    {% endif %}
                     <div>
                         <h3>{{ service.nom }}</h3>
                         <p>{{ service.description }}</p>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('services', { update: service.serviceid }) }}#form-modification" class="btn btn-secondary">Modifier</a>
+                            <a href="{{ path('services', { delete: service.serviceid }) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce service ?')">Supprimer</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -30,5 +38,25 @@
         {% endfor %}
     </div>
 </div>
+
+{% if is_granted('ROLE_ADMIN') %}
+    <div class="form-container">
+        <h3>Créer un Service</h3>
+        {{ form_start(serviceType) }}
+            {{ form_widget(serviceType) }}
+            <button type="submit" name="create">Créer le service</button>
+        {{ form_end(serviceType) }}
+    </div>
+
+    {% if serviceUpdateType %}
+        <div id="form-modification" class="form-container">
+            <h3>Modifier un Service</h3>
+            {{ form_start(serviceUpdateType) }}
+                {{ form_widget(serviceUpdateType) }}
+                <button type="submit" name="update">Mettre à Jour</button>
+            {{ form_end(serviceUpdateType) }}
+        </div>
+    {% endif %}
+{% endif %}
 {% include 'footer.html.twig' %}
 {% endblock %}

@@ -1,0 +1,58 @@
+{# templates/habitat/habitat_name.html.twig #}
+{% extends 'header.html.twig' %}
+
+{% block title %}{{ habitat.nom }}{% endblock %}
+
+{% block body %}
+<div class="habitat-detail">
+    <div class="hero-section">
+        <img src="{{ asset(habitat.getImagePath()) }}" alt="{{ habitat.nom }}" class="img-fluid">
+        <div class="hero-content">
+            <h1>{{ habitat.nom }}</h1>
+            <p>{{ habitat.description }}</p>
+        </div>
+    </div>
+    <h2>Animaux présents dans cet habitat :</h2>
+    {% if animaux is not empty %}
+        <div class="animals">
+            {% for animal in animaux %}
+                <div class="animal-card">
+                    <img src="{{ asset(animal.getImagePath()) }}" alt="{{ animal.prenom }}" class="animal-image">
+                    <h3>{{ animal.prenom }}</h3>
+                    <p>{{ animal.getRaceName() }}</p>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <div class="d-flex justify-content-between mt-2">
+                            <a href="?update={{ animal.animalId }}" class="btn btn-warning">Modifier</a>
+                            <form action="?delete={{ animal.animalId }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet animal ?');">
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Aucun animal dans cet habitat.</p>
+    {% endif %}
+</div>
+
+{% if is_granted('ROLE_ADMIN') %}
+    <div class="form-container">
+        <h3>Créer un Animal</h3>
+        {{ form_start(animalType) }}
+            {{ form_widget(animalType) }}
+            <button type="submit" name="create">Créer l'animal</button>
+        {{ form_end(animalType) }}
+    </div>
+
+    {% if animalUpdateType %}
+        <div id="form-modification" class="form-container">
+            <h3>Modifier un Animal</h3>
+            {{ form_start(animalUpdateType) }}
+                {{ form_widget(animalUpdateType) }}
+                <button type="submit" name="update">Mettre à Jour</button>
+            {{ form_end(animalUpdateType) }}
+        </div>
+    {% endif %}
+{% endif %}
+{% endblock %}

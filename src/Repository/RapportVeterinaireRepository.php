@@ -6,43 +6,39 @@ use App\Entity\RapportVeterinaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<RapportVétérinaire>
- *
- * @method RapportVétérinaire|null find($id, $lockMode = null, $lockVersion = null)
- * @method RapportVétérinaire|null findOneBy(array $criteria, array $orderBy = null)
- * @method RapportVétérinaire[]    findAll()
- * @method RapportVétérinaire[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class RapportVétérinaireRepository extends ServiceEntityRepository
+class RapportVeterinaireRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, RapportVeterinaire::class);
     }
 
-//    /**
-//     * @return RapportVétérinaire[] Returns an array of RapportVétérinaire objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('r.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByFilters($animal, $date)
+    {
+        $queryBuilder = $this->createQueryBuilder('r')
+            ->join('r.animal', 'a')
+            ->select('r, a');
 
-//    public function findOneBySomeField($value): ?RapportVétérinaire
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if ($animal) {
+            $queryBuilder->andWhere('a.animal_id = :animal')
+                ->setParameter('animal', $animal);
+        }
+
+        if ($date) {
+            $queryBuilder->andWhere('r.date = :date')
+                ->setParameter('date', $date);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function countConsultationsByAnimal()
+    {
+        return $this->createQueryBuilder('r')
+            ->select('a.prenom as animalName, COUNT(r.rapport_veterinaire_id) as consultations')
+            ->join('r.animal', 'a')
+            ->groupBy('a.animal_id')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

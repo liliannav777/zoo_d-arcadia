@@ -1,0 +1,41 @@
+{% extends 'header.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+
+<div id="hero" class="hero-section">
+    <img src="{{ asset('assets/styles/images/zoo.jpg') }}" alt="Description de l'image">
+    <div class="hero-content">
+        <h1>Connexion</h1>
+    </div>
+</div>
+    <h1 class="text-center mb-4">Connexion</h1>
+    <div class="text-center">
+    
+    <form action="{{ path('login') }}" method="post">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <div class="mb-3">
+                <label for="username" class="form-label">Nom d'utilisateur</label>
+                <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control" required autofocus>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Mot de passe</label>
+                <input type="password" id="password" name="_password" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Se connecter</button>
+    </form>
+
+    
+
+    {% if error %}
+        <div class="alert alert-danger mt-3" role="alert">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+        </div>
+    {% endif %}
+</div>
+
+{% include 'footer.html.twig' %}
+{% endblock %}

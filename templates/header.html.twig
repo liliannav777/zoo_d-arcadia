@@ -28,7 +28,14 @@
                     <li><a href="{{ path('services') }}" class="{{ app.request.attributes.get('_route') == 'services' ? 'active' : '' }}">Nos services</a></li>
                     <li><a href="{{ path('habitat') }}" class="{{ app.request.attributes.get('_route') == 'habitats' ? 'active' : '' }}">Nos habitats et animaux</a></li>
                     <li><a href="{{ path('contact') }}" class="{{ app.request.attributes.get('_route') == 'contact' ? 'active' : '' }}">Contact</a></li>
-                    <li><a href="#" class="{{ app.request.attributes.get('_route') == 'login' ? 'active' : '' }}">Connexion</a></li>
+                    {% if app.user %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path('admin') }}" class="{{ app.request.attributes.get('_route') == 'admin_dashboard' ? 'active' : '' }}">Espace Administrateur</a></li>
+                        {% endif %}
+                    <li><a href="{{ path('logout') }}" class="{{ app.request.attributes.get('_route') == 'app_logout' ? 'active' : '' }}">Déconnexion</a></li>
+                {% else %}
+                    <li><a href="{{ path('login') }}" class="{{ app.request.attributes.get('_route') == 'app_login' ? 'active' : '' }}">Connexion</a></li>
+                {% endif %}
                 </ul>
             </nav>
         </div>
