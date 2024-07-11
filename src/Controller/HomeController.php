@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Avis;
+use App\Entity\Horaire;
+use App\Form\HoraireType;
 use App\Repository\AvisRepository;
+use App\Repository\HoraireRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,12 +26,53 @@ class HomeController extends AbstractController
     }
 
     #[Route('/', name: 'Accueil')]
-    public function index(): Response
-    {   
+    public function index(Request $request,  EntityManagerInterface $em): Response
+    {   /* Gérer les avis */
         $avisList =  $this->avisRepository->findAll();
+
+
+        // Récupération de tous les horaires
+        $horaires = $em->getRepository(Horaire::class)->findAll();
+
+        $horaire = new Horaire();
+        $form = $this->createForm(HoraireType::class, $horaire);
+
+        $editId = $request->query->get('edit');
+        if ($editId) {
+            $horaire = $em->getRepository(Horaire::class)->find($editId);
+            if (!$horaire) {
+                throw $this->createNotFoundException('Aucun horaire trouvé pour l\'id '.$editId);
+            }
+            $form = $this->createForm(HoraireType::class, $horaire);
+        }
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            if ($editId) {
+                $em->persist($horaire);
+            } else {
+                $em->persist($data);
+            }
+            $em->flush();
+
+            return $this->redirectToRoute('Accueil');
+        }
+
+        if ($request->query->get('delete')) {
+            $deleteId = $request->query->get('delete');
+            $horaire = $em->getRepository(Horaire::class)->find($deleteId);
+            if ($horaire) {
+                $em->remove($horaire);
+                $em->flush();
+            }
+            return $this->redirectToRoute('Accueil');
+        }
 
         return $this->render('home.html.twig', [
             'avisList' => $avisList,
+            'horaires' => $horaires,
+            'form' => $form->createView(),
         ]);
     }
 

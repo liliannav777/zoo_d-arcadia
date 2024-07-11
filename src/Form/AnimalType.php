@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class AnimalType extends AbstractType
 {
@@ -19,17 +20,25 @@ class AnimalType extends AbstractType
             ->add('prenom', TextType::class, [
                 'label' => 'Prénom',
             ])
-            ->add('etat', ChoiceType::class, [
-                'choices' => [
-                    'En bonne santé' => 'En bonne santé',
-                    'Malade' => 'Malade',
-                ],
+            ->add('etat', TextType::class, [
                 'label' => 'État',
             ])
             ->add('race', EntityType::class, [
                 'class' => Race::class,
                 'choice_label' => 'label',
                 'label' => 'Race',
+                'placeholder' => 'Sélectionnez une race',
+                'required'=> false
+            ])
+            ->add('newRace', TextType::class, [
+                'label' => 'Nouvelle Race',
+                'required' => false,
+                'mapped' => false,
+            ])
+            ->add('imageFile', FileType::class, [
+                'label' => 'Image de l\'animal',
+                'mapped' => false,
+                'required' => false,
             ]);
     }
 

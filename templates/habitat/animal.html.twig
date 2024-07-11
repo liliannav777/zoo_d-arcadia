@@ -1,4 +1,3 @@
-{# templates/habitat/habitat_name.html.twig #}
 {% extends 'header.html.twig' %}
 
 {% block title %}{{ habitat.nom }}{% endblock %}
@@ -6,7 +5,11 @@
 {% block body %}
 <div class="habitat-detail">
     <div class="hero-section">
-        <img src="{{ asset(habitat.getImagePath()) }}" alt="{{ habitat.nom }}" class="img-fluid">
+        {% if habitat.images|length > 0 %}
+            <img src="data:image/jpeg;base64,{{ habitat.images[0].imageData }}" alt="{{ habitat.nom }}" class="img-fluid">
+        {% else %}
+            <img src="{{ asset('assets/styles/images/default.jpg') }}" alt="{{ habitat.nom }}" class="img-fluid">
+        {% endif %}
         <div class="hero-content">
             <h1>{{ habitat.nom }}</h1>
             <p>{{ habitat.description }}</p>
@@ -20,6 +23,7 @@
                     <img src="{{ asset(animal.getImagePath()) }}" alt="{{ animal.prenom }}" class="animal-image">
                     <h3>{{ animal.prenom }}</h3>
                     <p>{{ animal.getRaceName() }}</p>
+                    <p>{{ animal.getEtat() }}</p>
                     {% if is_granted('ROLE_ADMIN') %}
                         <div class="d-flex justify-content-between mt-2">
                             <a href="?update={{ animal.animalId }}" class="btn btn-warning">Modifier</a>
@@ -38,21 +42,17 @@
 
 {% if is_granted('ROLE_ADMIN') %}
     <div class="form-container">
-        <h3>Créer un Animal</h3>
-        {{ form_start(animalType) }}
+        {% if animalUpdateId %}
+            <h3>Modifier un Animal</h3>
+        {% else %}
+            <h3>Créer un Animal</h3>
+        {% endif %}
+        {{ form_start(animalType, {'attr': {'enctype': 'multipart/form-data'}}) }}
             {{ form_widget(animalType) }}
-            <button type="submit" name="create">Créer l'animal</button>
+            <button type="submit" name="{{ animalUpdateId ? 'update' : 'create' }}">
+                {{ animalUpdateId ? 'Mettre à Jour' : 'Créer l\'animal' }}
+            </button>
         {{ form_end(animalType) }}
     </div>
-
-    {% if animalUpdateType %}
-        <div id="form-modification" class="form-container">
-            <h3>Modifier un Animal</h3>
-            {{ form_start(animalUpdateType) }}
-                {{ form_widget(animalUpdateType) }}
-                <button type="submit" name="update">Mettre à Jour</button>
-            {{ form_end(animalUpdateType) }}
-        </div>
-    {% endif %}
 {% endif %}
 {% endblock %}

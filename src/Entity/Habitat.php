@@ -21,20 +21,23 @@ class Habitat
     #[ORM\Column(type: 'text')]
     private $description;
 
-
     #[ORM\Column(type: 'string', length: 50)]
-    private $commentaire_habitat;
+    private ?string $commentaire_habitat = null;
 
     #[ORM\OneToMany(mappedBy: 'habitat', targetEntity: Animal::class)]
     private Collection $animaux;
 
-    #[ORM\ManyToMany(targetEntity: Image::class, mappedBy: 'habitats')]
+    #[ORM\ManyToMany(targetEntity: Image::class, inversedBy: 'habitats')]
+    #[ORM\JoinTable(name: 'habitat_image',
+        joinColumns: [new ORM\JoinColumn(name: 'habitat_id', referencedColumnName: 'habitat_id')],
+        inverseJoinColumns: [new ORM\JoinColumn(name: 'image_id', referencedColumnName: 'image_id')]
+    )]
     private Collection $images;
-
 
     public function __construct()
     {
         $this->animaux = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getHabitatId(): ?int
@@ -54,12 +57,6 @@ class Habitat
         return $this;
     }
 
-    public function getImagePath(): ?string
-    {
-        return 'assets/styles/images/habitats/' . $this->habitat_id . '.jpg';
-    }
-
-    
     public function getDescription(): ?string
     {
         return $this->description;
@@ -77,7 +74,7 @@ class Habitat
         return $this->commentaire_habitat;
     }
 
-    public function setCommentaireHabitat(string $commentaire_habitat): self
+    public function setCommentaireHabitat(?string $commentaire_habitat): self
     {
         $this->commentaire_habitat = $commentaire_habitat;
 
@@ -105,7 +102,6 @@ class Habitat
     public function removeAnimal(Animal $animal): self
     {
         if ($this->animaux->removeElement($animal)) {
-            // set the owning side to null (unless already changed)
             if ($animal->getHabitat() === $this) {
                 $animal->setHabitat(null);
             }
@@ -140,5 +136,4 @@ class Habitat
 
         return $this;
     }
-
 }

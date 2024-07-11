@@ -144,13 +144,27 @@
 </section>
 
 <section id="zoo-hours" class="zoo-hours section">
-  <div class="container-hours">
-    <div class="text-center">
-      <div class="hours-box">
+  <div class="container-hours text-center">
+    <div id="form-modification" class="hours-box">
+      <i class="bi bi-clock" style="font-size: 2rem;"></i>
       <h3>Horaires du Zoo</h3>
-      <p>Ouvert tous les jours de 9h00 à 18h00.</p>
-      <p>Fermeture exceptionnelle les jours fériés.</p>
-      </div>
+      <ul id="horaires-list">
+        {% for horaire in horaires %}
+          <li>
+            <span class="description">{{ horaire.description|nl2br }}</span>
+          </li>
+          {% if is_granted('ROLE_ADMIN') %}
+              <a href="{{ path('Accueil', { 'edit': horaire.id }) }}#form-modification" class="btn btn-primary" onclick="scrollToForm()">Modifier</a>
+              <a href="{{ path('Accueil', { 'delete': horaire.id }) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet horaire ?');">Supprimer</a>
+            {% endif %}
+        {% endfor %}
+      </ul>
+      {% if is_granted('ROLE_ADMIN') %}
+        {{ form_start(form) }}
+          {{ form_widget(form) }}
+          <button type="submit" class="btn btn-primary">{{ form.vars.value.id is null ? 'Ajouter' : 'Modifier' }}</button>
+        {{ form_end(form) }}
+      {% endif %}
     </div>
   </div>
 </section>
@@ -206,7 +220,7 @@
             </select>
           </div>
           <div class="text-center">
-            <button type="submit" class="btn btn-primary">Envoyer</button>
+            <button type="submit" class="btn ">Envoyer</button>
           </div>
         </form>
       </div>

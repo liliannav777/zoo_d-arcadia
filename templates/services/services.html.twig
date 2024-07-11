@@ -1,3 +1,4 @@
+{# templates/services/services.html.twig #}
 {% extends 'header.html.twig' %}
 
 {% block title %}Nos Services{% endblock %}
@@ -18,17 +19,17 @@
         {% for service in services %}
             <div class="col-12">
                 <div class="service-box d-flex align-items-center p-4">
-                    {% if service.getImagePath() %}
-                        <img src="{{ asset(service.getImagePath()) }}" alt="{{ service.nom }}">
+                    {% if service.imagePath %}
+                        <img src="{{ asset(service.imagePath) }}" alt="{{ service.nom }}">
                     {% else %}
                         <img src="{{ asset('assets/styles/images/default.jpg') }}" alt="{{ service.nom }}">
                     {% endif %}
                     <div>
                         <h3>{{ service.nom }}</h3>
                         <p>{{ service.description }}</p>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ path('services', { update: service.serviceid }) }}#form-modification" class="btn btn-secondary">Modifier</a>
-                            <a href="{{ path('services', { delete: service.serviceid }) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce service ?')">Supprimer</a>
+                        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EMPLOYE') %}
+                            <a href="{{ path('services', { update: service.serviceId }) }}#form-modification" class="btn btn-secondary">Modifier</a>
+                            <a href="{{ path('services', { delete: service.serviceId }) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce service ?')">Supprimer</a>
                         {% endif %}
                     </div>
                 </div>
@@ -39,24 +40,14 @@
     </div>
 </div>
 
-{% if is_granted('ROLE_ADMIN') %}
-    <div class="form-container">
-        <h3>Créer un Service</h3>
-        {{ form_start(serviceType) }}
-            {{ form_widget(serviceType) }}
-            <button type="submit" name="create">Créer le service</button>
-        {{ form_end(serviceType) }}
+{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EMPLOYE') %}
+    <div id="#form-modification" class="form-container">
+        <h3>{{ isEditing ? 'Modifier un Service' : 'Créer un Service' }}</h3>
+        {{ form_start(serviceForm) }}
+            {{ form_widget(serviceForm) }}
+            <button type="submit">{{ isEditing ? 'Mettre à Jour' : 'Créer le service' }}</button>
+        {{ form_end(serviceForm) }}
     </div>
-
-    {% if serviceUpdateType %}
-        <div id="form-modification" class="form-container">
-            <h3>Modifier un Service</h3>
-            {{ form_start(serviceUpdateType) }}
-                {{ form_widget(serviceUpdateType) }}
-                <button type="submit" name="update">Mettre à Jour</button>
-            {{ form_end(serviceUpdateType) }}
-        </div>
-    {% endif %}
 {% endif %}
 {% include 'footer.html.twig' %}
 {% endblock %}

@@ -18,11 +18,7 @@ class Image
     #[ORM\Column(type: 'blob')]
     private $image_data;
 
-    #[ORM\ManyToMany(targetEntity: Habitat::class, inversedBy: 'images')]
-    #[ORM\JoinTable(name: 'habitat_image',
-        joinColumns: [new ORM\JoinColumn(name: 'image_id', referencedColumnName: 'image_id')],
-        inverseJoinColumns: [new ORM\JoinColumn(name: 'habitat_id', referencedColumnName: 'habitat_id')]
-    )]
+    #[ORM\ManyToMany(targetEntity: Habitat::class, mappedBy: 'images')]
     private Collection $habitats;
 
     public function __construct()
@@ -37,7 +33,11 @@ class Image
 
     public function getImageData(): ?string
     {
-        return $this->image_data;
+        if ($this->image_data) {
+            return base64_encode(stream_get_contents($this->image_data));
+        }
+
+        return null;
     }
 
     public function setImageData(string $image_data): self

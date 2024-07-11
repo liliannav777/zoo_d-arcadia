@@ -21,10 +21,10 @@ class Animal
     #[ORM\Column(type: 'string', length: 50)]
     private $etat;
 
-    #[ORM\OneToMany(mappedBy: 'animal', targetEntity: RapportVeterinaire::class)]
-    private $rapportsVeterinaires;
+    #[ORM\OneToMany(mappedBy: 'animal', targetEntity: RapportEmploye::class)]
+    private $rapportsEmploye;
 
-    #[ORM\ManyToOne(targetEntity: Race::class, inversedBy: 'animal')]
+    #[ORM\ManyToOne(targetEntity: Race::class, inversedBy: 'animaux')]
     #[ORM\JoinColumn(nullable: false, name: 'race_id', referencedColumnName: 'race_id')]
     private ?Race $race = null;
 
@@ -32,10 +32,15 @@ class Animal
     #[ORM\JoinColumn(name: 'habitat_id', referencedColumnName: 'habitat_id', nullable: false)]
     private ?Habitat $habitat = null;
 
-    public function __construct() {
-        $this->rapportsVeterinaires = new ArrayCollection();
-    }
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $imagePath = null;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private $detailsEtat;
+
+    public function __construct() {
+        $this->rapportsEmploye = new ArrayCollection();
+    }
 
     public function getAnimalId(): ?int
     {
@@ -66,30 +71,27 @@ class Animal
         return $this;
     }
 
-    /**
-     * @return Collection|RapportVeterinaire[]
-     */
-    public function getRapportsVeterinaires(): Collection
+    public function getRapportsEmploye(): Collection
     {
-        return $this->rapportsVeterinaires;
+        return $this->rapportsEmploye;
     }
 
-    public function addRapportVeterinaire(RapportVeterinaire $rapportVeterinaire): self
+    public function addRapportEmploye(RapportEmploye $rapportEmploye): self
     {
-        if (!$this->rapportsVeterinaires->contains($rapportVeterinaire)) {
-            $this->rapportsVeterinaires[] = $rapportVeterinaire;
-            $rapportVeterinaire->setAnimal($this);
+        if (!$this->rapportsEmploye->contains($rapportEmploye)) {
+            $this->rapportsEmploye[] = $rapportEmploye;
+            $rapportEmploye->setAnimal($this);
         }
 
         return $this;
     }
 
-    public function removeRapportVeterinaire(RapportVeterinaire $rapportVeterinaire): self
+    public function removeRapportEmploye(RapportEmploye $rapportEmploye): self
     {
-        if ($this->rapportsVeterinaires->removeElement($rapportVeterinaire)) {
+        if ($this->rapportsEmploye->removeElement($rapportEmploye)) {
             // set the owning side to null (unless already changed)
-            if ($rapportVeterinaire->getAnimal() === $this) {
-                $rapportVeterinaire->setAnimal(null);
+            if ($rapportEmploye->getAnimal() === $this) {
+                $rapportEmploye->setAnimal(null);
             }
         }
 
@@ -108,7 +110,7 @@ class Animal
         return $this;
     }
 
-    public function getRaceName():string
+    public function getRaceName(): string
     {
         return $this->race ? $this->race->getLabel() : '';
     }
@@ -125,9 +127,27 @@ class Animal
         return $this;
     }
 
-    public function getImagePath(): string
+    public function getImagePath(): ?string
     {
-        // Supposons que l'image est stockée sous le format 'assets/styles/images/animals/{slug}.jpg'
-        return 'assets/styles/images/animals/' . $this->animal_id . '.jpg';
+        return $this->imagePath ? 'assets/styles/images/animals/' . $this->imagePath : 'assets/styles/images/default.jpg';
+    }
+
+    public function setImagePath(?string $imagePath): self
+    {
+        $this->imagePath = $imagePath;
+
+        return $this;
+    }
+
+    public function getDetailEtat(): ?string
+    {
+        return $this->detailsEtat;
+    }
+
+    public function setDetailEtat(?string $detailsEtat): self
+    {
+        $this->detailsEtat = $detailsEtat;
+
+        return $this;
     }
 }

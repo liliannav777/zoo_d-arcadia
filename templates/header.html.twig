@@ -31,7 +31,13 @@
                     {% if app.user %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <li><a href="{{ path('admin') }}" class="{{ app.request.attributes.get('_route') == 'admin_dashboard' ? 'active' : '' }}">Espace Administrateur</a></li>
-                        {% endif %}
+                    {% endif %}
+                    {% if is_granted('ROLE_EMPLOYE') %}
+                        <li><a href="{{ path('employee') }}">Tableau de Bord Employé</a></li>
+                    {% endif %}
+                    {% if is_granted('ROLE_VETERINAIRE') %}
+                        <li><a href="{{ path('veterinaire') }}">Tableau de Bord Vétérinaire</a></li>
+                    {% endif %}
                     <li><a href="{{ path('logout') }}" class="{{ app.request.attributes.get('_route') == 'app_logout' ? 'active' : '' }}">Déconnexion</a></li>
                 {% else %}
                     <li><a href="{{ path('login') }}" class="{{ app.request.attributes.get('_route') == 'app_login' ? 'active' : '' }}">Connexion</a></li>

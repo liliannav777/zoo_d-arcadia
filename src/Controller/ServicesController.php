@@ -1,5 +1,7 @@
 <?php
 
+// src/Controller/ServicesController.php
+
 namespace App\Controller;
 
 use App\Entity\Service;
@@ -23,15 +25,25 @@ class ServicesController extends AbstractController
     ): Response {
         $services = $serviceRepository->findAll();
 
-        // Formulaire de création d'un nouveau service
+        // Déterminer si nous sommes en mode création ou modification
         $service = new Service();
-        $serviceType = $this->createForm(ServiceType::class, $service);
-        $serviceType->handleRequest($request);
+        $isEditing = false;
 
-        if ($serviceType->isSubmitted() && $serviceType->isValid() && $request->request->has('create')) {
-            /** @var UploadedFile $file */
-            $file = $serviceType->get('imagePath')->getData();
+        $editId = $request->query->get('update');
+        if ($editId) {
+            $service = $serviceRepository->find($editId);
+            if (!$service) {
+                throw $this->createNotFoundException('Aucun service trouvé pour l\'id ' . $editId);
+            }
+            $isEditing = true;
+        }
 
+        // Créer le formulaire pour le service
+        $form = $this->createForm(ServiceType::class, $service);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->get('imagePath')->getData();
             if ($file) {
                 $newFilename = uniqid().'.'.$file->guessExtension();
                 try {
@@ -45,43 +57,15 @@ class ServicesController extends AbstractController
 
             $entityManager->persist($service);
             $entityManager->flush();
-            $this->addFlash('success', 'Service créé avec succès !');
+
+            $this->addFlash('success', $isEditing ? 'Service mis à jour avec succès !' : 'Service créé avec succès !');
             return $this->redirectToRoute('services');
         }
 
-        // Formulaire de mise à jour d'un service
-        $serviceUpdateId = $request->query->get('update');
-        $serviceToUpdate = $serviceUpdateId ? $serviceRepository->find($serviceUpdateId) : null;
-        $serviceUpdateType = null;
-
-        if ($serviceToUpdate) {
-            $serviceUpdateType = $this->createForm(ServiceType::class, $serviceToUpdate);
-            $serviceUpdateType->handleRequest($request);
-
-            if ($serviceUpdateType->isSubmitted() && $serviceUpdateType->isValid() && $request->request->has('update')) {
-                $file = $serviceUpdateType->get('imagePath')->getData();
-
-                if ($file) {
-                    $newFilename = uniqid().'.'.$file->guessExtension();
-                    try {
-                        $file->move($this->getParameter('kernel.project_dir').'/public/assets/styles/images/services/', $newFilename);
-                    } catch (FileException $e) {
-                        $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
-                        return $this->redirectToRoute('services');
-                    }
-                    $serviceToUpdate->setImagePath('assets/styles/images/services/'.$newFilename);
-                }
-
-                $entityManager->flush();
-                $this->addFlash('success', 'Service mis à jour avec succès !');
-                return $this->redirectToRoute('services');
-            }
-        }
-
         // Suppression du service
-        $serviceDeleteId = $request->query->get('delete');
-        if ($serviceDeleteId) {
-            $serviceToDelete = $serviceRepository->find($serviceDeleteId);
+        $deleteId = $request->query->get('delete');
+        if ($deleteId) {
+            $serviceToDelete = $serviceRepository->find($deleteId);
             if ($serviceToDelete) {
                 $entityManager->remove($serviceToDelete);
                 $entityManager->flush();
@@ -93,10 +77,9 @@ class ServicesController extends AbstractController
         }
 
         return $this->render('services/services.html.twig', [
-            'serviceType' => $serviceType->createView(),
             'services' => $services,
-            'serviceUpdateType' => $serviceUpdateType ? $serviceUpdateType->createView() : null,
-            'serviceUpdateId' => $serviceToUpdate ? $serviceToUpdate->getServiceId() : null,
+            'serviceForm' => $form->createView(),
+            'isEditing' => $isEditing,
         ]);
     }
 }
