@@ -12,33 +12,71 @@
         {% endif %}
         <div class="hero-content">
             <h1>{{ habitat.nom }}</h1>
-            <p>{{ habitat.description }}</p>
         </div>
     </div>
+    <p class="habitat-description">{{ habitat.description }}</p>
+
     <h2>Animaux présents dans cet habitat :</h2>
-    {% if animaux is not empty %}
-        <div class="animals">
-            {% for animal in animaux %}
-                <div class="animal-card">
-                    <img src="{{ asset(animal.getImagePath()) }}" alt="{{ animal.prenom }}" class="animal-image">
-                    <h3>{{ animal.prenom }}</h3>
-                    <p>{{ animal.getRaceName() }}</p>
-                    <p>{{ animal.getEtat() }}</p>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <div class="d-flex justify-content-between mt-2">
-                            <a href="?update={{ animal.animalId }}" class="btn btn-warning">Modifier</a>
-                            <form action="?delete={{ animal.animalId }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet animal ?');">
-                                <button type="submit" class="btn btn-danger">Supprimer</button>
-                            </form>
-                        </div>
+{% if animaux is not empty %}
+    <div class="animals">
+        {% for animal in animaux %}
+            <div class="animal-card">
+                <img src="{{ asset(animal.getImagePath()) }}" alt="{{ animal.prenom }}" class="animal-image"
+                     data-toggle="modal" data-target="#animalModal{{ animal.animalid }}"
+                     data-prenom="{{ animal.prenom }}"
+                     data-race="{{ animal.getRaceName() }}"
+                     data-etat="{{ animal.getEtat() }}"
+                     data-rapports="{{ animal.rapportVeterinaireJson|raw }}"
+                     onclick="handleClick('{{ animal.prenom }}')"> <!-- Appelle handleClick avec le prénom de l'animal -->
+                <h3>{{ animal.prenom }}</h3>
+                <p>{{ animal.getRaceName() }}</p>
+                <p>{{ animal.getEtat() }}</p>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="d-flex justify-content-center mt-2">
+                        <a href="?update={{ animal.animalId }}" class="btn-habitat mr-2">Modifier</a>
+                        <form action="?delete={{ animal.animalId }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet animal ?');">
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        {% else %}
+    <p class="animals">Aucun animal dans cet habitat.</p>
+{% endif %}
+    </div>
+
+
+    {% for animal in animaux %}
+    <div id="animalModal{{ animal.animalid }}" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <img class="image-modale" src="{{ asset(animal.getImagePath()) }}" alt="Image de l'animal" class="animal-image">
+            <div class="animal-details">
+                <h3>{{ animal.prenom }}</h3>
+                <p><strong>Race:</strong> {{ animal.getRaceName() }}</p>
+                <p><strong>État:</strong> {{ animal.getEtat() }}</p>
+                <p><strong>Rapports Vétérinaires du jour:</strong></p>
+                <ul>
+                    {% set today = "now"|date("d/m/Y") %}
+                    {% set hasReportToday = false %}
+                    {% if animal.rapportVeterinaire is not empty %}
+                        {% for rapport in animal.rapportVeterinaire %}
+                            {% if rapport.date|date('d/m/Y') == today %}
+                                {% set hasReportToday = true %}
+                                <li>Date: {{ rapport.date|date('d/m/Y') }}, Nourriture: {{ rapport.nourriture }}, Grammage: {{ rapport.grammage }}, Détails: {{ rapport.detailetatanimal ?: 'Aucun détail disponible' }}</li>
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
-                </div>
-            {% endfor %}
+                    {% if not hasReportToday %}
+                        <li>Aucun rapport disponible pour aujourd'hui.</li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-    {% else %}
-        <p>Aucun animal dans cet habitat.</p>
-    {% endif %}
-</div>
+    </div>
+{% endfor %}
+
 
 {% if is_granted('ROLE_ADMIN') %}
     <div class="form-container">
@@ -55,4 +93,6 @@
         {{ form_end(animalType) }}
     </div>
 {% endif %}
+
+{% include 'footer.html.twig' %}
 {% endblock %}

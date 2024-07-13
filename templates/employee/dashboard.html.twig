@@ -4,7 +4,7 @@
 
 {% block body %}
 <div id="hero" class="hero-section">
-    <img src="{{ asset('assets/styles/images/pixabay_1660044.png') }}" alt="Description de l'image">
+    <img src="{{ asset('assets/styles/images/Seasonal Staff (Animal Care) 5148 - Grahm S. Jones, Columbus Zoo and Aquarium (1).webp') }}" alt="Description de l'image">
     <div class="hero-content">
         <h1>Espace Employé</h1>
     </div>
@@ -35,16 +35,57 @@
     <h3>Ajouter un Rapport Employé</h3>
     {{ form_start(form, {'method': 'post', 'action': path('employee')}) }}
         {{ form_widget(form) }}
-        <button type="submit" class="btn btn-success">Ajouter le Rapport</button>
+        <button type="submit" class="btn btn-primary">Ajouter le Rapport</button>
     {{ form_end(form) }}
 
-    <h3>Filtrer les Rapports Vétérinaires </h3>
+    <div class="rapport-employé">
+    <h3>Filtrer les Rapports Employés</h3>
     <form method="get" action="{{ path('employee') }}">
-        <div class="form-group">
+        <div class="mb-3">
             <label for="date">Date :</label>
             <input type="date" id="date" name="date" class="form-control" value="{{ app.request.query.get('date') }}">
         </div>
-        <div class="form-group">
+        <div class="mb-3">
+            <label for="race">Race :</label>
+            <select id="race" name="race" class="form-control">
+                <option value="">Tous</option>
+                {% for race in races %}
+                    <option value="{{ race }}" {% if app.request.query.get('race') == race %}selected{% endif %}>{{ race }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Filtrer</button>
+    </form>
+    </div>
+    <div class="rapport-employé">
+        <h3>Rapports Employé</h3>
+        {% if rapportsEmploye is not empty %}
+            <ul>
+                {% for rapport in rapportsEmploye %}
+                    <li>
+                        <strong>{{ rapport.animal.prenom }}</strong> ({{ rapport.date|date('d/m/Y H:i') }}):
+                        <p>{{ rapport.nourriture }}</p>
+                        <p>{{ rapport.quantite }}</p>
+                        <form method="post" action="{{ path('employee') }}" style="display:inline;">
+                            <input type="hidden" name="rapport_id" value="{{ rapport.id }}">
+                            <button type="submit" name="action" value="edit" class="btn btn-primary">Modifier</button>
+                            <button type="submit" name="action" value="delete" class="btn btn-danger">Supprimer</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucun rapport employé pour aujourd'hui.</p>
+        {% endif %}
+        </div>
+    
+    <h3>Filtrer les Rapports Vétérinaires </h3>
+    <form method="get" action="{{ path('employee') }}">
+        <div class="mb-3">
+            <label for="date">Date :</label>
+            <input type="date" id="date" name="date" class="form-control" value="{{ app.request.query.get('date') }}">
+        </div>
+        <div class="mb-3">
             <label for="race">Race :</label>
             <select id="race" name="race" class="form-control">
                 <option value="">Tous</option>
@@ -56,55 +97,38 @@
         <button type="submit" class="btn btn-primary">Filtrer</button>
     </form>
 
-    <h3>Rapports Vétérinaire</h3>
-    {% if rapportsVeterinaire is not empty %}
-        <table class="table mt-4">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Animal</th>
-                    <th>Race</th>
-                    <th>État</th>
-                    <th>Détail de l'état</th>
-                    <th>Commentaire Habitat</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for rapport in rapportsVeterinaire %}
+    <div class="rapport-employé">
+        <h3>Rapports Vétérinaire</h3>
+        {% if rapportsVeterinaire is not empty %}
+            <table class="table mt-4">
+                <thead>
                     <tr>
-                        <td>{{ rapport.date|date('d/m/Y') }}</td>
-                        <td>{{ rapport.animal.prenom }}</td>
-                        <td>{{ rapport.animal.race }}</td>
-                        <td>{{ rapport.animal.etat }}</td>
-                        <td>{{ rapport.animal.detailEtat }}</td>
-                        <td>{{ rapport.animal.habitat ? rapport.animal.habitat.commentaireHabitat : '' }}</td>
+                        <th>Date</th>
+                        <th>Animal</th>
+                        <th>Race</th>
+                        <th>État</th>
+                        <th>Détail de l'état</th>
+                        <th>Commentaire Habitat</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>Aucun rapport vétérinaire pour aujourd'hui.</p>
-    {% endif %}
+                </thead>
+                <tbody>
+                    {% for rapport in rapportsVeterinaire %}
+                        <tr>
+                            <td>{{ rapport.date|date('d/m/Y') }}</td>
+                            <td>{{ rapport.animal.prenom }}</td>
+                            <td>{{ rapport.animal.race }}</td>
+                            <td>{{ rapport.animal.etat }}</td>
+                            <td>{{ rapport.animal.detailEtat }}</td>
+                            <td>{{ rapport.animal.habitat ? rapport.animal.habitat.commentaireHabitat : '' }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Aucun rapport vétérinaire pour aujourd'hui.</p>
+        {% endif %}
+        </div>
 
-
-<h3>Rapports Employé</h3>
-    {% if rapportsEmploye is not empty %}
-        <ul>
-            {% for rapport in rapportsEmploye %}
-                <li>
-                    <strong>{{ rapport.animal.prenom }}</strong> ({{ rapport.date|date('d/m/Y H:i') }}):
-                    <p>{{ rapport.nourriture }}</p>
-                    <p>{{ rapport.quantite }}</p>
-                    <form method="post" action="{{ path('employee') }}" style="display:inline;">
-                        <input type="hidden" name="rapport_id" value="{{ rapport.id }}">
-                        <button type="submit" name="action" value="edit" class="btn btn-warning">Modifier</button>
-                        <button type="submit" name="action" value="delete" class="btn btn-danger">Supprimer</button>
-                    </form>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Aucun rapport employé pour aujourd'hui.</p>
-    {% endif %}
 </div>
+{% include 'footer.html.twig' %}
 {% endblock %}

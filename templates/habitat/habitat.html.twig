@@ -1,4 +1,4 @@
-{# templates/habitat/habitat.html.twig #}
+
 
 {% extends 'header.html.twig' %}
 
@@ -30,8 +30,8 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ habitat.nom }}</h5>
                             {% if is_granted('ROLE_ADMIN') %}
-                                <div class="d-flex justify-content-between mt-2">
-                                    <a href="?update={{ habitat.habitatId }}#form-modification" class="btn btn-warning">Modifier</a>
+                                <div class="d-flex justify-content-center m-2">
+                                    <a href="?update={{ habitat.habitatId }}#form-modification" class="btn-habitat mr-5">Modifier</a>
                                     <form action="?delete={{ habitat.habitatId }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet habitat ?');">
                                         <button type="submit" class="btn btn-danger">Supprimer</button>
                                     </form>
@@ -50,7 +50,7 @@
         <h3>{{ isEditing ? 'Modifier un Habitat' : 'Créer un Habitat' }}</h3>
         {{ form_start(habitatForm) }}
             {{ form_widget(habitatForm) }}
-            <button type="submit">{{ isEditing ? 'Mettre à Jour' : 'Créer l\'habitat' }}</button>
+            <button type="submit" class="btn-habitat">{{ isEditing ? 'Mettre à Jour' : 'Créer l\'habitat' }}</button>
         {{ form_end(habitatForm) }}
     </div>
 {% endif %}

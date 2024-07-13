@@ -57,19 +57,19 @@
                     <div class="row">
             
                         <div class="col-md-6">
-                            {{ form_row(form.nom, { 'attr': { 'class': 'form-control', 'placeholder': 'Votre nom' } }) }} 
+                            {{ form_row(form.nom, {'label_attr': { 'class': 'custom-label' }, 'attr': { 'class': 'form-control', 'placeholder': 'Votre nom' } }) }} 
                         </div>
             
                         <div class="col-md-6">
-                            {{ form_row(form.email, { 'attr': { 'class': 'form-control', 'placeholder': 'Votre adresse e-mail' } }) }}
+                            {{ form_row(form.email, { 'label_attr': { 'class': 'custom-label' },'attr': { 'class': 'form-control', 'placeholder': 'Votre adresse e-mail' } }) }}
                         </div>
             
                         <div class="col-md-12">
-                            {{ form_row(form.sujet, { 'attr': { 'class': 'form-control', 'placeholder': 'Sujet du message' } }) }}
+                            {{ form_row(form.sujet, {'label_attr': { 'class': 'custom-label' }, 'attr': { 'class': 'form-control', 'placeholder': 'Sujet du message' } }) }}
                         </div>
             
                         <div class="col-md-12">
-                            {{ form_row(form.message, { 'attr': { 'class': 'form-control', 'placeholder': 'Votre message', 'rows': 10 } }) }}
+                            {{ form_row(form.message, {'label_attr': { 'class': 'custom-label' }, 'attr': { 'class': 'form-control', 'placeholder': 'Votre message', 'rows': 10 } }) }}
                         </div>
             
                         <div class="col-md-12 text-center">

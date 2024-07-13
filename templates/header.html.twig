@@ -22,6 +22,11 @@
             <h1 class="sitename">Zoo d'Arcadia</h1>
         </a>
         <div class="container">
+            <button class="burger-menu" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <nav id="navbar" class="navbar">
                 <ul>
                     <li><a href="{{ path('Accueil') }}" class="{{ app.request.attributes.get('_route') == 'home' ? 'active' : '' }}">Accueil</a></li>
@@ -39,20 +44,22 @@
                         <li><a href="{{ path('veterinaire') }}">Tableau de Bord Vétérinaire</a></li>
                     {% endif %}
                     <li><a href="{{ path('logout') }}" class="{{ app.request.attributes.get('_route') == 'app_logout' ? 'active' : '' }}">Déconnexion</a></li>
-                {% else %}
-                    <li><a href="{{ path('login') }}" class="{{ app.request.attributes.get('_route') == 'app_login' ? 'active' : '' }}">Connexion</a></li>
-                {% endif %}
+                    {% else %}
+                        <li><a href="{{ path('login') }}" class="{{ app.request.attributes.get('_route') == 'app_login' ? 'active' : '' }}">Connexion</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>
     </header>
+    
+    
     <main>
         {% block body %}{% endblock %}
     </main>
-    {% block javascripts %}
+    {% block javascript %}
+    <script src="{{ asset('build/app.js') }}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    <script src="{{ asset('build/app.js') }}" defer></script>
     {% endblock %}
 </body>
 </html>

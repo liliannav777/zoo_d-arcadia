@@ -17,6 +17,7 @@
         <h3>Créer un Utilisateur</h3>
         {{ form_start(userCreationForm) }}
             {{ form_widget(userCreationForm) }}
+            <button type="submit" class="btn btn-primary">Créer l'utilisateur</button>
         {{ form_end(userCreationForm) }}
     </div>
 
@@ -68,21 +69,21 @@
         <p>Aucun rapport vétérinaire pour aujourd'hui.</p>
     {% endif %}
 
-    <!-- Tableau de bord des consultations -->
-    <div class="consultation-table">
-        <h3>Consultations par Animal</h3>
+    <!-- Tableau de bord des clics -->
+    <div class="clicks-table">
+        <h3>Clics par Animal</h3>
         <table class="table">
             <thead>
                 <tr>
                     <th>Animal</th>
-                    <th>Nombre de Consultations</th>
+                    <th>Nombre de Clics</th>
                 </tr>
             </thead>
             <tbody>
-                {% for consultation in consultations %}
+                {% for click in clicks %}
                     <tr>
-                        <td>{{ consultation.animalName }}</td>
-                        <td>{{ consultation.consultations }}</td>
+                        <td>{{ click.animalPrenom }}</td>
+                        <td>{{ click.clickCount }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -1,5 +1,6 @@
 <?php
 
+// src/Entity/RapportVeterinaire.php
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -23,7 +24,7 @@ class RapportVeterinaire
 
     #[ORM\ManyToOne(targetEntity: Animal::class, inversedBy: 'rapportsVeterinaires')]
     #[ORM\JoinColumn(name: 'animal_id', referencedColumnName: 'animal_id', nullable: false)]
-    private ?Animal $animal = null;
+    private ?Animal $animal;
 
     #[ORM\ManyToOne(targetEntity: Utilisateur::class, inversedBy: 'rapportsVeterinaires')]
     #[ORM\JoinColumn(name: 'username', referencedColumnName: 'username', nullable: false)]
@@ -99,12 +100,10 @@ class RapportVeterinaire
         return $this->animal ? $this->animal->getEtat() : null;
     }
 
-
     public function getDetailEtatAnimal(): ?string
     {
         return $this->animal ? $this->animal->getDetailEtat() : null;
     }
-
 
     public function setEtatAnimal(string $etatAnimal): self
     {
@@ -127,7 +126,6 @@ class RapportVeterinaire
         return $this->animal ? $this->animal->getHabitat()->getCommentaireHabitat() : null;
     }
 
-    // Met à jour le commentaire de l'habitat via l'animal
     public function setCommentaireHabitat(?string $commentaireHabitat): self
     {
         if ($this->animal && $this->animal->getHabitat()) {

@@ -1,3 +1,9 @@
 controllers:
     resource: ../src/Controller/
     type: attribute
+
+animal:
+    path: /noshabitats/{habitat_id}
+    controller: App\Controller\HabitatController::detail
+    methods: [GET, POST]
+

@@ -24,6 +24,9 @@ class Animal
     #[ORM\OneToMany(mappedBy: 'animal', targetEntity: RapportEmploye::class)]
     private $rapportsEmploye;
 
+    #[ORM\OneToMany(mappedBy: 'animal', targetEntity: RapportVeterinaire::class)]
+    private $rapportVeterinaire;
+
     #[ORM\ManyToOne(targetEntity: Race::class, inversedBy: 'animaux')]
     #[ORM\JoinColumn(nullable: false, name: 'race_id', referencedColumnName: 'race_id')]
     private ?Race $race = null;
@@ -40,6 +43,7 @@ class Animal
 
     public function __construct() {
         $this->rapportsEmploye = new ArrayCollection();
+        $this->rapportVeterinaire = new ArrayCollection();
     }
 
     public function getAnimalId(): ?int
@@ -92,6 +96,33 @@ class Animal
             // set the owning side to null (unless already changed)
             if ($rapportEmploye->getAnimal() === $this) {
                 $rapportEmploye->setAnimal(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRapportVeterinaire(): Collection
+    {
+        return $this->rapportVeterinaire;
+    }
+
+    public function addRapportVeterinaire(RapportVeterinaire $rapportVeterinaire): self
+    {
+        if (!$this->rapportVeterinaire->contains($rapportVeterinaire)) {
+            $this->rapportVeterinaire[] = $rapportVeterinaire;
+            $rapportVeterinaire->setAnimal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRapportVeterinaire(RapportVeterinaire $rapportVeterinaire): self
+    {
+        if ($this->rapportVeterinaire->removeElement($rapportVeterinaire)) {
+            // set the owning side to null (unless already changed)
+            if ($rapportVeterinaire->getAnimal() === $this) {
+                $rapportVeterinaire->setAnimal(null);
             }
         }
 

@@ -65,7 +65,7 @@ class VeterinaireController extends AbstractController
         // Gestion des données du formulaire pour ajouter un rapport
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $rapportVeterinaire = $form->getData();
-            $rapportVeterinaire->setVeterinaire($this->getUser()); // Définit l'utilisateur courant comme vétérinaire
+            $rapportVeterinaire->setUtilisateur($this->getUser()); 
 
             $entityManager->persist($rapportVeterinaire);
             $entityManager->flush();

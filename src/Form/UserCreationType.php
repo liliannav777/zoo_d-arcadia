@@ -40,8 +40,7 @@ class UserCreationFormType extends AbstractType
                 },
                 'label' => 'Rôle',
                 'placeholder' => 'Choisir un rôle',
-            ])
-            ->add('save', SubmitType::class, ['label' => 'Créer l\'Utilisateur']);
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

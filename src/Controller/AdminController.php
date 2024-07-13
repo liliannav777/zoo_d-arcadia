@@ -7,6 +7,7 @@ use App\Form\UserCreationFormType;
 use App\Repository\AnimalRepository;
 use App\Repository\RapportVeterinaireRepository;
 use App\Repository\ServiceRepository;
+use App\Service\ClickService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +27,8 @@ class AdminController extends AbstractController
         UserPasswordHasherInterface $passwordHasher,
         RapportVeterinaireRepository $reportRepository,
         ServiceRepository $serviceRepository,
-        AnimalRepository $animalRepository
+        AnimalRepository $animalRepository,
+        ClickService $clickService
     ): Response {
         // Formulaire de création d'utilisateur
         $user = new Utilisateur();
@@ -46,8 +48,9 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('admin');
         }
 
-        // Récupérer les consultations par animal
-        $consultations = $reportRepository->countConsultationsByAnimal();
+
+        // Récupérer les clics par animal
+        $clicks = $clickService->getClicksByAnimal();
 
         // Récupération des paramètres de filtrage
         $filterDate = $request->query->get('date');
@@ -87,7 +90,7 @@ class AdminController extends AbstractController
         return $this->render('admin/dashboard.html.twig', [
             'userCreationForm' => $userForm->createView(),
             'services' => $serviceRepository->findAll(),
-            'consultations' => $consultations,
+            'clicks' => $clicks,
             'rapportsVeterinaire' => $rapportsVeterinaire,
             'races' => array_column($races, 'label'),  // 'label' est le champ retourné par la requête DQL
         ]);

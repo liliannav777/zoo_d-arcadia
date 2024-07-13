@@ -34,7 +34,7 @@ class RapportVeterinaireType extends AbstractType
                 'required' => true,
             ])
             ->add('grammage', TextType::class, [
-                'label' => 'Grammage de la Nourriture',
+                'label' => 'Grammage de la Nourriture (en kg)',
                 'required' => true,
             ])
             ->add('date', DateType::class, [
