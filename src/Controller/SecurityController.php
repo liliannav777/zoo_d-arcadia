@@ -1,6 +1,6 @@
 <?php
 
-// src/Controller/SecurityController.php
+
 
 namespace App\Controller;
 
@@ -35,7 +35,7 @@ class SecurityController extends AbstractController
     #[Route('/logout', name: 'logout')]
     public function logout(): void
     {
-        // Symfony gère la déconnexion via le route /logout définie dans security.yaml
+        
     }
 
 }

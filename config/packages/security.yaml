@@ -10,7 +10,7 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\Utilisateur
-                property: username  # Assurez-vous que 'username' est bien utilisé pour l'authentification
+                property: username 
 
     firewalls:
         dev:
@@ -26,7 +26,7 @@ security:
                 default_target_path: Accueil
             logout:
                 path: logout
-                target: login
+                target: '/'
 
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }

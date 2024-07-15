@@ -21,7 +21,6 @@ class UserCreationFormType extends AbstractType
     {
         $this->entityManager = $options['entityManager'];
 
-        // Exclude ROLE_ADMIN from the choices
         $roles = $this->entityManager->getRepository(Role::class)->findAll();
         $choices = [];
         foreach ($roles as $role) {
@@ -31,7 +30,9 @@ class UserCreationFormType extends AbstractType
         }
 
         $builder
-            ->add('username', null, ['label' => 'Courriel'])
+            ->add('username', null, ['label' => 'Nom d\'utilisateur'])
+            ->add('nom', null, ['label' => 'Nom'])
+            ->add('prenom', null, ['label' => 'Prenom'])
             ->add('password', PasswordType::class, ['label' => 'Mot de Passe'])
             ->add('role', ChoiceType::class, [
                 'choices' => $choices,

@@ -1,6 +1,6 @@
 <?php
 
-// src/Entity/Animal.php
+
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;

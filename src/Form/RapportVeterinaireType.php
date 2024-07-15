@@ -45,6 +45,7 @@ class RapportVeterinaireType extends AbstractType
             ->add('detailEtatAnimal', TextareaType::class, [
                 'label' => 'Détail de l’État de l’Animal',
                 'required' => false,
+                'empty_data' => '',
             ])
             ->add('commentaireHabitat', TextareaType::class, [
                 'label' => 'Commentaire sur l\'Habitat',

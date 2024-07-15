@@ -4,7 +4,7 @@
 
 {% block body %}
 <div id="hero" class="hero-section">
-    <img src="{{ asset('assets/styles/images/pixabay_1660044.png') }}" alt="Description de l'image">
+    <img src="{{ asset('assets/styles/images/animals/baby-snow-leopard-8132690_1280.webp') }}" alt="Description de l'image">
     <div class="hero-content">
         <h1>Espace Administrateur</h1>
     </div>
@@ -12,15 +12,40 @@
 <div class="dashboard">
     <h2>Tableau de Bord Administrateur</h2>
 
-    <!-- Formulaire de création d'utilisateur -->
-    <div class="form-container">
+    <div class="col-md-8 col-center mt-4 rapport-employé">
         <h3>Créer un Utilisateur</h3>
-        {{ form_start(userCreationForm) }}
-            {{ form_widget(userCreationForm) }}
-            <button type="submit" class="btn btn-primary">Créer l'utilisateur</button>
+        {{ form_start(userCreationForm, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+        <div class="mb-3">
+            {{ form_label(userCreationForm.username, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(userCreationForm.username, {'attr': {'class': 'form-control', 'placeholder': 'Entrez l\'adresse e-mail de l\'utilisateur'}}) }}
+            {{ form_errors(userCreationForm.username) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(userCreationForm.nom, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(userCreationForm.nom, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le nom de l\'utilisateur'}}) }}
+            {{ form_errors(userCreationForm.nom) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(userCreationForm.prenom, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(userCreationForm.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le prenom de l\'utilisateur'}}) }}
+            {{ form_errors(userCreationForm.prenom) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(userCreationForm.password, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(userCreationForm.password, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le mot de passe'}}) }}
+            {{ form_errors(userCreationForm.password) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(userCreationForm.role, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(userCreationForm.role, {'attr': {'class': 'form-select'}}) }}
+            {{ form_errors(userCreationForm.role) }}
+        </div>
+        <button type="submit" class="btn btn-primary">Créer l'utilisateur</button>
         {{ form_end(userCreationForm) }}
     </div>
+    
 
+    <div class="col-md-8 col-center mt-4 rapport-employé">
     <h3>Filtrer Rapport Vétérinaire</h3>
     <form method="GET" action="{{ path('admin') }}" class="mb-4">
         <div class="mb-3">
@@ -38,7 +63,9 @@
         </div>
         <button type="submit" class="btn btn-primary">Filtrer</button>
     </form>
+    </div>
 
+    <div class="col-md-8 col-center mt-4 rapport-employé">
     <h3>Rapports Vétérinaire</h3>
     {% if rapportsVeterinaire is not empty %}
         <table class="table mt-4">
@@ -66,10 +93,10 @@
             </tbody>
         </table>
     {% else %}
-        <p>Aucun rapport vétérinaire pour aujourd'hui.</p>
+        <p>Aucun rapport vétérinaire.</p>
     {% endif %}
-
-    <!-- Tableau de bord des clics -->
+    </div>
+    <div class="col-md-8 col-center mt-4 rapport-employé">
     <div class="clicks-table">
         <h3>Clics par Animal</h3>
         <table class="table">
@@ -89,6 +116,7 @@
             </tbody>
         </table>
     </div>
-</div>
+    </div>
+    </div>
 {% include 'footer.html.twig' %}
 {% endblock %}

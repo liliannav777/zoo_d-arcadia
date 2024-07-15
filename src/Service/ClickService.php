@@ -1,6 +1,6 @@
 <?php 
 
-// src/Service/ClickService.php
+
 namespace App\Service;
 
 class ClickService
@@ -20,7 +20,7 @@ class ClickService
             ['$inc' => ['count' => 1]],
             ['upsert' => true]
         );
-        // Ajoute ce log pour vérifier l'appel de la méthode
+        
         error_log("Clic enregistré pour l'animal: $prenom");
     }
 
@@ -29,7 +29,6 @@ class ClickService
         $collection = $this->mongodbService->getCollection('animal_clicks');
         $cursor = $collection->find();
 
-        // Formater le résultat pour un usage plus facile dans le template Twig
         $result = [];
         foreach ($cursor as $click) {
             $result[] = [

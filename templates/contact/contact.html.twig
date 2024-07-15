@@ -8,21 +8,14 @@
     <div class="hero-content">
         <h1>Contactez-nous</h1>
     </div>
-  </div>
-  <section id="contact" class="contact section">
-        <h2>Contact</h2>
-    <!-- Section Title -->
-    <div class="container section-title aos-init aos-animate" data-aos="fade-up">
-        
-        <p>Nous serions ravis de recevoir vos questions ou vos commentaires. Remplissez le formulaire ci-dessous pour nous contacter.</p>
-    </div><!-- End Section Title -->
+</div>
+<section id="contact" class="contact section">
+    <h2>Contact</h2>
+    <p class="animals">Nous serions ravis de recevoir vos questions ou vos commentaires. Remplissez le formulaire ci-dessous pour nous contacter.</p>
 
-    <div class="container-fluid">
-
+    <div class="container-fluid mt-5">
         <div class="row">
-
             <div class="col-lg-6 ">
-
                 <div class="info-wrap">
                     <div class="info-item d-flex aos-init aos-animate">
                         <i class="bi bi-geo-alt flex-shrink-0"></i>
@@ -52,42 +45,46 @@
                 </div>
             </div>
 
-            <div class="col-lg-6"> 
+            <div class="col-lg-6">
                 {{ form_start(form, { 'attr': { 'class': 'php-email-form aos-init aos-animate', 'data-aos': 'fade-up', 'data-aos-delay': '200' } }) }}
                     <div class="row">
-            
+
                         <div class="col-md-6">
-                            {{ form_row(form.nom, {'label_attr': { 'class': 'custom-label' }, 'attr': { 'class': 'form-control', 'placeholder': 'Votre nom' } }) }} 
+                            {{ form_row(form.nom, {'label_attr': { 'class': 'custom-label' }, 'attr': { 'class': 'form-control', 'placeholder': 'Votre nom' } }) }}
                         </div>
-            
+
                         <div class="col-md-6">
                             {{ form_row(form.email, { 'label_attr': { 'class': 'custom-label' },'attr': { 'class': 'form-control', 'placeholder': 'Votre adresse e-mail' } }) }}
                         </div>
-            
+
                         <div class="col-md-12">
                             {{ form_row(form.sujet, {'label_attr': { 'class': 'custom-label' }, 'attr': { 'class': 'form-control', 'placeholder': 'Sujet du message' } }) }}
                         </div>
-            
+
                         <div class="col-md-12">
                             {{ form_row(form.message, {'label_attr': { 'class': 'custom-label' }, 'attr': { 'class': 'form-control', 'placeholder': 'Votre message', 'rows': 10 } }) }}
                         </div>
-            
+
                         <div class="col-md-12 text-center">
-                            <div class="error-message">{{ form_errors(form) }}</div>
-                            <div class="sent-message">{{ app.flashes('success')[0] ?? '' }}</div>
-            
+                            <div class="error-message">
+                                {% for error in form_errors(form) %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            <div class="sent-message">
+                                {% for message in app.flashes('success') %}
+                                    {{ message }}
+                                {% endfor %}
+                            </div>
+
                             {{ form_row(form.send, { 'attr': { 'class': 'btn' } }) }}
                         </div>
-            
+
                     </div>
                 {{ form_end(form) }}
             </div>
-            
-
         </div>
-
     </div>
-
 </section>
 {% include 'footer.html.twig' %}
 {% endblock %}

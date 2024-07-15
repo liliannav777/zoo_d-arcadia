@@ -29,3 +29,4 @@ services:
         arguments:
             - '%env(MONGODB_URL)%'
             - '%env(MONGODB_DATABASE)%'
+

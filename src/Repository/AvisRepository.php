@@ -14,9 +14,7 @@ class AvisRepository extends ServiceEntityRepository
         parent::__construct($registry, Avis::class);
     }
 
-    /**
-     * Récupère les avis non validés
-     */
+
     public function findUnvalidatedAvis()
     {
         return $this->createQueryBuilder('a')

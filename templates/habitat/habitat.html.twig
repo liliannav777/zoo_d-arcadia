@@ -9,12 +9,13 @@
     <img src="{{ asset('assets/styles/images/lemurs-1010643_1280.jpg') }}" alt="Description de l'image">
     <div class="hero-content">
         <h1>Nos habitats</h1>
-        <p>Un habitat, au sein du Zoo d'Arcadia, est une zone écologique ou environnementale spécialement conçue pour abriter une espèce particulière d'animal, de plante ou d'un autre type d'organisme. Chaque habitat reproduit la zone dans laquelle l'organisme vivrait naturellement et où il peut trouver de la nourriture, un abri, une protection et des partenaires pour la reproduction, en utilisant les caractéristiques auxquelles l'espèce s'est adaptée pour survivre. Ces habitats sont soigneusement créés pour refléter l'environnement naturel dans lequel vit l'organisme, ou l'environnement physique qui entoure une population de la faune, assurant ainsi leur bien-être et leur épanouissement au sein du zoo.</p>
+        
     </div>
 </div>
 
 <section id="habitats" class="habitats-section">
     <div class="container-habitat">
+        <p class="habitat-description">Un habitat, au sein du Zoo d'Arcadia, est une zone écologique ou environnementale spécialement conçue pour abriter une espèce particulière d'animal, de plante ou d'un autre type d'organisme. Chaque habitat reproduit la zone dans laquelle l'organisme vivrait naturellement et où il peut trouver de la nourriture, un abri, une protection et des partenaires pour la reproduction, en utilisant les caractéristiques auxquelles l'espèce s'est adaptée pour survivre. Ces habitats sont soigneusement créés pour refléter l'environnement naturel dans lequel vit l'organisme, ou l'environnement physique qui entoure une population de la faune, assurant ainsi leur bien-être et leur épanouissement au sein du zoo.</p>
         <h2>Découvrez nos habitats</h2>
         <div class="row mt-4">
             {% for habitat in habitats %}
@@ -46,14 +47,29 @@
 </section>
 
 {% if is_granted('ROLE_ADMIN') %}
-    <div id="form-modification" class="form-container">
+    <div id="form-modification" class="form-container mt-4">
         <h3>{{ isEditing ? 'Modifier un Habitat' : 'Créer un Habitat' }}</h3>
-        {{ form_start(habitatForm) }}
-            {{ form_widget(habitatForm) }}
-            <button type="submit" class="btn-habitat">{{ isEditing ? 'Mettre à Jour' : 'Créer l\'habitat' }}</button>
+        {{ form_start(habitatForm, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+            <div class="mb-3">
+                {{ form_label(habitatForm.nom, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(habitatForm.nom, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le nom de l\'habitat'}}) }}
+                {{ form_errors(habitatForm.nom) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(habitatForm.description, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(habitatForm.description, {'attr': {'class': 'form-control', 'placeholder': 'Entrez une description'}}) }}
+                {{ form_errors(habitatForm.description) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(habitatForm.imageFile, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(habitatForm.imageFile, {'attr': {'class': 'form-control', 'placeholder': 'Choisissez une image'}}) }}
+                {{ form_errors(habitatForm.imageFile) }}
+            </div>
+            <button type="submit" class="btn btn-primary">{{ isEditing ? 'Mettre à Jour' : 'Créer l\'habitat' }}</button>
         {{ form_end(habitatForm) }}
     </div>
 {% endif %}
+
 
 {% include 'footer.html.twig' %}
 {% endblock %}

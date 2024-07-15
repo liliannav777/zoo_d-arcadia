@@ -1,6 +1,5 @@
 <?php
 
-// src/Controller/ServicesController.php
 
 namespace App\Controller;
 

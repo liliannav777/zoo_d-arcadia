@@ -32,10 +32,10 @@
                 <p>{{ animal.getRaceName() }}</p>
                 <p>{{ animal.getEtat() }}</p>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <div class="d-flex justify-content-center mt-2">
-                        <a href="?update={{ animal.animalId }}" class="btn-habitat mr-2">Modifier</a>
+                    <div class=" justify-content-center mt-2">
+                        <a href="?update={{ animal.animalId }}" class="btn btn-primary mr-2">Modifier</a>
                         <form action="?delete={{ animal.animalId }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet animal ?');">
-                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
                         </form>
                     </div>
                 {% endif %}
@@ -57,14 +57,17 @@
                 <p><strong>Race:</strong> {{ animal.getRaceName() }}</p>
                 <p><strong>État:</strong> {{ animal.getEtat() }}</p>
                 <p><strong>Rapports Vétérinaires du jour:</strong></p>
-                <ul>
+                <ul class="text-align-center">
                     {% set today = "now"|date("d/m/Y") %}
                     {% set hasReportToday = false %}
                     {% if animal.rapportVeterinaire is not empty %}
                         {% for rapport in animal.rapportVeterinaire %}
                             {% if rapport.date|date('d/m/Y') == today %}
                                 {% set hasReportToday = true %}
-                                <li>Date: {{ rapport.date|date('d/m/Y') }}, Nourriture: {{ rapport.nourriture }}, Grammage: {{ rapport.grammage }}, Détails: {{ rapport.detailetatanimal ?: 'Aucun détail disponible' }}</li>
+                                <li >Date: {{ rapport.date|date('d/m/Y') }}</li> 
+                                <li>Nourriture: {{ rapport.nourriture }}</li> 
+                                <li>Grammage: {{ rapport.grammage }} kg</li>
+                                <li>Détails: {{ rapport.detailetatanimal ?: 'Aucun détail disponible' }}</li>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
@@ -79,20 +82,45 @@
 
 
 {% if is_granted('ROLE_ADMIN') %}
-    <div class="form-container">
+    <div class="form-container mt-4">
         {% if animalUpdateId %}
             <h3>Modifier un Animal</h3>
         {% else %}
             <h3>Créer un Animal</h3>
         {% endif %}
-        {{ form_start(animalType, {'attr': {'enctype': 'multipart/form-data'}}) }}
-            {{ form_widget(animalType) }}
-            <button type="submit" name="{{ animalUpdateId ? 'update' : 'create' }}">
+        {{ form_start(animalType, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate', 'enctype': 'multipart/form-data'}}) }}
+            <div class="mb-3">
+                {{ form_label(animalType.prenom, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(animalType.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le prénom de l\'animal'}}) }}
+                {{ form_errors(animalType.prenom) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(animalType.etat, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(animalType.etat, {'attr': {'class': 'form-control', 'placeholder': 'Entrez l\'état de l\'animal'}}) }}
+                {{ form_errors(animalType.etat) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(animalType.race, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(animalType.race, {'attr': {'class': 'form-control', 'placeholder': 'Entrez la race de l\'animal'}}) }}
+                {{ form_errors(animalType.race) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(animalType.newRace, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(animalType.newRace, {'attr': {'class': 'form-control', 'placeholder': 'Entrez une nouvelle race (si besoin)'}}) }}
+                {{ form_errors(animalType.newRace) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(animalType.imageFile, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(animalType.imageFile, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(animalType.imageFile) }}
+            </div>
+            <button type="submit" name="{{ animalUpdateId ? 'update' : 'create' }}" class="btn btn-primary">
                 {{ animalUpdateId ? 'Mettre à Jour' : 'Créer l\'animal' }}
             </button>
         {{ form_end(animalType) }}
     </div>
 {% endif %}
+
 
 {% include 'footer.html.twig' %}
 {% endblock %}

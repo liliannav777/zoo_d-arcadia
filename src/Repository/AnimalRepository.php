@@ -14,7 +14,7 @@ class AnimalRepository extends ServiceEntityRepository
     }
 
     /**
-     * Trouver les animaux par l'identifiant de l'habitat.
+     * 
      *
      * @param int $habitatId
      * @return Animal[]

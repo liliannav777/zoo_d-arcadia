@@ -13,42 +13,73 @@
     <h2>Tableau de Bord Vétérinaire</h2>
 
     <div class="col-md-8 col-center m-auto">
-    <h3>Ajouter un Rapport Vétérinaire</h3>
-    {{ form_start(form, {'method': 'post', 'action': path('veterinaire')}) }}
-        {{ form_widget(form) }}
-        <button type="submit" class="btn btn-primary">Ajouter</button>
-    {{ form_end(form) }}
-</div>
-    <div class="col-md-8 col-center m-auto rapport-employé">
-    <h3>Filtrer Rapport Vétérinaire</h3>
-    <form method="GET" action="{{ path('veterinaire') }}" class="mb-4">
-        <div class="mb-3">
-            <label for="filterDate" class="form-label">Date :</label>
-            <input type="date" class="form-control" name="date" id="filterDate" value="{{ app.request.query.get('date') }}">
+        <h3>{{ form.vars.value.rapportveterinaireid ? 'Modifier' : 'Ajouter' }} un Rapport Vétérinaire</h3>
+        {{ form_start(form, {'method': 'post', 'action': path('veterinaire', {'rapport_id': form.vars.value.rapportveterinaireid})}) }}
+        <div class="form-group">
+            {{ form_label(form.animal) }}
+            {{ form_widget(form.animal, {'attr': {'class': 'form-control'}}) }}
         </div>
-        <div class="mb-3">
-            <label for="filterRace" class="form-label">Race :</label>
-            <select class="form-control" name="race" id="filterRace">
-                <option value="">-- Sélectionner une race --</option>
-                {% for race in races %}
-                    <option value="{{ race }}" {% if app.request.query.get('race') == race %}selected{% endif %}>{{ race }}</option>
-                {% endfor %}
-            </select>
+        <div class="form-group">
+            {{ form_label(form.etatAnimal) }}
+            {{ form_widget(form.etatAnimal, {'attr': {'class': 'form-control'}}) }}
         </div>
-        <button type="submit" class="btn btn-primary">Filtrer</button>
-    </form>
+        <div class="form-group">
+            {{ form_label(form.date) }}
+            {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.nourriture) }}
+            {{ form_widget(form.nourriture, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.grammage) }}
+            {{ form_widget(form.grammage, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.detailEtatAnimal) }}
+            {{ form_widget(form.detailEtatAnimal, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.commentaireHabitat) }}
+            {{ form_widget(form.commentaireHabitat, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <button type="submit" class="btn btn-primary" onclick="this.disabled=true;this.form.submit();">{{ form.vars.value.rapportveterinaireid ? 'Modifier' : 'Ajouter' }}</button>
+        {{ form_end(form) }}
     </div>
-    <div class="col-md-8 col-center m-auto rapport-employé">
+
+    <div class="col-md-8 col-center rapport-employé">
+        <h3>Filtrer les Rapports Vétérinaires</h3>
+        <form method="GET" action="{{ path('veterinaire') }}">
+            <div class="mb-3">
+                <label for="filterDate" class="form-label">Date :</label>
+                <input type="date" id="date" name="date" class="form-control" value="{{ app.request.query.get('date') }}">
+            </div>
+            <div class="mb-3">
+                <label for="filterRace" class="form-label">Race :</label>
+                <select id="race" name="race" class="form-control">
+                    <option value="">Tous</option>
+                    {% for race in races %}
+                        <option value="{{ race }}" {% if app.request.query.get('race') == race %}selected{% endif %}>{{ race }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filtrer</button>
+        </form>
+    </div>
+
+    <div class="col-md-8 col-center rapport-employé">
         <h3>Rapports Vétérinaires</h3>
         {% if rapportsVeterinaire is not empty %}
-            <table class="table mt-4">
-                <thead>
+            <table class="table">
+                <thead class="thead-center">
                     <tr>
                         <th>Date</th>
                         <th>Animal</th>
                         <th>Race</th>
-                        <th>État</th>
-                        <th>Détail de l'état</th>
+                        <th>État de l’Animal</th>
+                        <th>Nourriture à Donner</th>
+                        <th>Quantité à donner</th>
+                        <th>Détail de l'État</th>
                         <th>Commentaire Habitat</th>
                         <th>Actions</th>
                     </tr>
@@ -59,14 +90,17 @@
                             <td>{{ rapport.date|date('d/m/Y') }}</td>
                             <td>{{ rapport.animal.prenom }}</td>
                             <td>{{ rapport.animal.race }}</td>
-                            <td>{{ rapport.animal.etat }}</td>
-                            <td>{{ rapport.animal.detailEtat }}</td>
-                            <td>{{ rapport.animal.habitat ? rapport.animal.habitat.commentaireHabitat : '' }}</td>
+                            <td>{{ rapport.etatAnimal }}</td>
+                            <td>{{ rapport.nourriture }}</td>
+                            <td>{{ rapport.grammage }}</td>
+                            <td>{{ rapport.detailEtatAnimal }}</td>
+                            <td>{{ rapport.commentaireHabitat }}</td>
                             <td>
-                                <form method="POST" action="{{ path('veterinaire') }}">
+                                <a href="{{ path('veterinaire', {'rapport_id': rapport.rapportveterinaireid}) }}" class="btn btn-primary">Modifier</a>
+                                <form method="POST" action="{{ path('veterinaire', {'rapport_id': rapport.rapportveterinaireid}) }}" class="d-inline">
+                                    <input type="hidden" name="_method" value="DELETE">
                                     <input type="hidden" name="rapport_id" value="{{ rapport.rapportveterinaireid }}">
-                                    <button type="submit" name="action" value="edit" class="btn btn-primary">Modifier</button>
-                                    <button type="submit" name="action" value="delete" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce rapport ?');">Supprimer</button>
+                                    <button type="submit" name="action" value="delete" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce rapport ?');">Supprimer</button>
                                 </form>
                             </td>
                         </tr>
@@ -78,40 +112,55 @@
         {% endif %}
     </div>
 
-    <h3>Filtrer les Rapports Employés</h3>
-    <form method="get" action="{{ path('employee') }}">
-        <div class="mb-3">
-            <label for="filterDate" class="form-label">Date :</label>
-            <input type="date" id="date" name="date" class="form-control" value="{{ app.request.query.get('date') }}">
-        </div>
-        <div class="mb-3">
-            <label for="filterRace" class="form-label">Race :</label>
-            <select id="race" name="race" class="form-control">
-                <option value="">Tous</option>
-                {% for race in races %}
-                    <option value="{{ race }}" {% if app.request.query.get('race') == race %}selected{% endif %}>{{ race }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Filtrer</button>
-    </form>
-    <div class="rapport-employé">
-    <h3>Rapports Employé</h3>
-    {% if rapportsEmploye is not empty %}
-        <ul>
-            {% for rapport in rapportsEmploye %}
-                <li>
-                    <strong>{{ rapport.animal.prenom }}</strong> ({{ rapport.date|date('d/m/Y H:i') }}):
-                    <p>{{ rapport.nourriture }}</p>
-                    <p>{{ rapport.quantite }}</p>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Aucun rapport employé pour aujourd'hui.</p>
-    {% endif %}
+    <div class="col-md-8 col-center m-auto rapport-employé">
+        <h3>Filtrer les Rapports Employés</h3>
+        <form method="GET" action="{{ path('veterinaire') }}">
+            <div class="mb-3">
+                <label for="filterDateEmploye" class="form-label">Date :</label>
+                <input type="date" id="filterDateEmploye" name="date" class="form-control" value="{{ app.request.query.get('date') }}">
+            </div>
+            <div class="mb-3">
+                <label for="filterRace" class="form-label">Race :</label>
+                <select id="race" name="race" class="form-control">
+                    <option value="">Tous</option>
+                    {% for race in races %}
+                        <option value="{{ race }}" {% if app.request.query.get('race') == race %}selected{% endif %}>{{ race }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filtrer</button>
+        </form>
+    </div>
+    
+    <div class="col-md-8 col-center rapport-employé">
+        <h3>Rapports Employé</h3>
+        {% if rapportsEmploye is not empty %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Prénom de l'Animal</th>
+                        <th>Race</th>
+                        <th>Date</th>
+                        <th>Nourriture Donnée</th>
+                        <th>Quantité Donnée</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rapport in rapportsEmploye %}
+                        <tr>
+                            <td>{{ rapport.animal.prenom }}</td>
+                            <td>{{ rapport.animal.race }}</td>
+                            <td>{{ rapport.date|date('d/m/Y H:i') }}</td>
+                            <td>{{ rapport.nourriture }}</td>
+                            <td>{{ rapport.quantite }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Aucun rapport employé pour aujourd'hui.</p>
+        {% endif %}
+    </div>
+    
 </div>
-</div>
-</div>
-{% include 'footer.html.twig' %}
 {% endblock %}

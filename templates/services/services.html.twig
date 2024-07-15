@@ -25,7 +25,7 @@
                         <img src="{{ asset('assets/styles/images/default.jpg') }}" alt="{{ service.nom }}">
                     {% endif %}
                     <div>
-                        <h3>{{ service.nom }}</h3>
+                        <h3 class="mt-4">{{ service.nom }}</h3>
                         <p>{{ service.description }}</p>
                         {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EMPLOYE') %}
                             <a href="{{ path('services', { update: service.serviceId }) }}#form-modification" class="btn btn-primary">Modifier</a>
@@ -41,13 +41,30 @@
 </div>
 
 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EMPLOYE') %}
-    <div id="#form-modification" class="form-container">
+<div class="col-md-8 col-center rapport-employé">
+    <div id="form-modification" class="form-container">
         <h3>{{ isEditing ? 'Modifier un Service' : 'Créer un Service' }}</h3>
-        {{ form_start(serviceForm) }}
-            {{ form_widget(serviceForm) }}
-            <button type="submit" class="btn-services">{{ isEditing ? 'Mettre à Jour' : 'Créer le service' }}</button>
+        {{ form_start(serviceForm, {'attr': {'class': 'service-form'}}) }}
+            <div class="services-form">
+                {{ form_label(serviceForm.nom, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(serviceForm.nom, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(serviceForm.nom, {'attr': {'class': 'form-error'}}) }}
+            </div>
+            <div class="services-form">
+                {{ form_label(serviceForm.description, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(serviceForm.description, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(serviceForm.description, {'attr': {'class': 'form-error'}}) }}
+            </div>
+            <div class="services-form">
+                {{ form_label(serviceForm.imagePath, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(serviceForm.imagePath, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(serviceForm.imagePath, {'attr': {'class': 'form-error'}}) }}
+            </div>
+            <button type="submit" class="btn btn-primary col-center">{{ isEditing ? 'Mettre à Jour' : 'Créer le service' }}</button>
         {{ form_end(serviceForm) }}
     </div>
+</div>
 {% endif %}
+
 {% include 'footer.html.twig' %}
 {% endblock %}

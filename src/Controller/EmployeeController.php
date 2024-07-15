@@ -1,6 +1,6 @@
 <?php
 
-// src/Controller/EmployeeController.php
+
 
 namespace App\Controller;
 
@@ -9,7 +9,7 @@ use App\Form\RapportEmployeType;
 use App\Repository\AvisRepository;
 use App\Repository\AnimalRepository;
 use App\Repository\RapportEmployeRepository;
-use App\Repository\RapportVeterinaireRepository;  // Ajout du repository pour les rapports vétérinaires
+use App\Repository\RapportVeterinaireRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,39 +24,39 @@ class EmployeeController extends AbstractController
         Request $request,
         AvisRepository $avisRepository,
         RapportEmployeRepository $rapportEmployeRepository,
-        RapportVeterinaireRepository $rapportVeterinaireRepository,  // Injection du repository pour les rapports vétérinaires
+        RapportVeterinaireRepository $rapportVeterinaireRepository,
         EntityManagerInterface $entityManager,
         AnimalRepository $animalRepository
     ): Response {
         // Récupération des avis non validés
         $avisNonValides = $avisRepository->findUnvalidatedAvis();
-
+    
         // Récupération des paramètres de filtrage
         $filterDate = $request->query->get('date');
         $filterRace = $request->query->get('race');
-
+    
         // Création de la requête pour les rapports d'employé
         $qb = $rapportEmployeRepository->createQueryBuilder('r')
             ->where('r.employe = :employe')
             ->setParameter('employe', $this->getUser());
-
+    
         // Date du jour
         $today = new DateTime();
         $startOfDay = $today->setTime(0, 0);
         $endOfDay = (clone $today)->setTime(23, 59, 59);
-
+    
         // Si une date est spécifiée dans le filtre, ajuster la période de temps
         if ($filterDate) {
             $date = new DateTime($filterDate);
             $startOfDay = $date->setTime(0, 0);
             $endOfDay = (clone $date)->setTime(23, 59, 59);
         }
-
+    
         // Filtrer par date
         $qb->andWhere('r.date BETWEEN :start AND :end')
             ->setParameter('start', $startOfDay)
             ->setParameter('end', $endOfDay);
-
+    
         // Filtrer par race si spécifiée
         if ($filterRace) {
             $qb->join('r.animal', 'a')
@@ -64,33 +64,60 @@ class EmployeeController extends AbstractController
                 ->andWhere('rac.label = :race')
                 ->setParameter('race', $filterRace);
         }
-
+    
         $rapportsEmploye = $qb->getQuery()->getResult();
-
-        // Création du formulaire pour ajouter un rapport d'employé
+    
+        // Création du formulaire pour ajouter ou modifier un rapport d'employé
         $rapportEmploye = new RapportEmploye();
+        $rapportId = $request->request->get('rapport_id');
+
+        if ($rapportId) {
+            $rapportEmploye = $rapportEmployeRepository->find($rapportId);
+            if (!$rapportEmploye) {
+                throw $this->createNotFoundException('Le rapport n\'existe pas.');
+            }
+        } else {
+            // On vérifie si l'utilisateur a soumis un formulaire sans spécifier un ID
+            if ($request->isMethod('POST')) {
+                $formData = $request->request->get('rapport_employe');
+                $rapportId = $formData['id'] ?? null;
+                if ($rapportId) {
+                    $rapportEmploye = $rapportEmployeRepository->find($rapportId);
+                    if (!$rapportEmploye) {
+                        throw $this->createNotFoundException('Le rapport n\'existe pas.');
+                    }
+                }
+            }
+        }
+
         $form = $this->createForm(RapportEmployeType::class, $rapportEmploye, [
             'method' => 'POST',
             'action' => $this->generateUrl('employee'),
         ]);
 
-        // Gestion des données du formulaire pour ajouter un rapport
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+        // Gestion des données du formulaire pour ajouter ou modifier un rapport
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $rapportEmploye = $form->getData();
             $rapportEmploye->setEmploye($this->getUser()); // Définit l'utilisateur courant comme employé
 
-            $entityManager->persist($rapportEmploye);
+            if ($rapportEmploye->getId()) {
+                // Mise à jour du rapport existant
+                $this->addFlash('success', 'Le rapport a été modifié avec succès.');
+            } else {
+                // Ajout d'un nouveau rapport
+                $entityManager->persist($rapportEmploye);
+                $this->addFlash('success', 'Le rapport a été ajouté avec succès.');
+            }
+
             $entityManager->flush();
-
-            $this->addFlash('success', 'Le rapport a été ajouté avec succès.');
-
             return $this->redirectToRoute('employee');
         }
 
         // Traitement des actions sur les avis et les rapports
         if ($request->isMethod('POST')) {
             $avisId = $request->request->get('avis_id');
-            $rapportId = $request->request->get('rapport_id');
             $action = $request->request->get('action');
 
             if ($avisId) {
@@ -105,35 +132,17 @@ class EmployeeController extends AbstractController
                     }
                     $entityManager->flush();
                 }
-            } elseif ($rapportId) {
-                $rapport = $rapportEmployeRepository->find($rapportId);
+            } elseif ($action === 'delete') {
+                $rapport = $rapportEmployeRepository->find($request->request->get('rapport_id'));
                 if ($rapport) {
-                    if ($action === 'edit') {
-                        $editForm = $this->createForm(RapportEmployeType::class, $rapport, [
-                            'method' => 'POST',
-                            'action' => $this->generateUrl('employee', ['rapport_id' => $rapportId]),
-                        ]);
-                        $editForm->handleRequest($request);
-
-                        if ($editForm->isSubmitted() && $editForm->isValid()) {
-                            $entityManager->flush();
-                            $this->addFlash('success', 'Rapport modifié avec succès.');
-
-                            return $this->redirectToRoute('employee');
-                        }
-
-                        return $this->render('employee/edit.html.twig', [
-                            'editForm' => $editForm->createView(),
-                        ]);
-                    } elseif ($action === 'delete') {
-                        $entityManager->remove($rapport);
-                        $this->addFlash('success', 'Rapport supprimé avec succès.');
-                        $entityManager->flush();
-                    }
+                    $entityManager->remove($rapport);
+                    $this->addFlash('success', 'Rapport supprimé avec succès.');
+                    $entityManager->flush();
                 }
+                return $this->redirectToRoute('employee');
+            } elseif ($action === 'edit') {
+                
             }
-
-            return $this->redirectToRoute('employee');
         }
 
         // Récupération des rapports vétérinaires
@@ -143,36 +152,36 @@ class EmployeeController extends AbstractController
             ->where('r.date BETWEEN :start AND :end')
             ->setParameter('start', $startOfDay)
             ->setParameter('end', $endOfDay);
-
+    
         // Filtrer par date
         if ($filterDate) {
             $date = new DateTime($filterDate);
             $startOfDay = $date->setTime(0, 0);
             $endOfDay = (clone $date)->setTime(23, 59, 59);
-
+    
             $qbVet->andWhere('r.date BETWEEN :start AND :end')
                 ->setParameter('start', $startOfDay)
                 ->setParameter('end', $endOfDay);
         }
-
+    
         // Filtrer par race si spécifiée
         if ($filterRace) {
             $qbVet->andWhere('rac.label = :race')
                 ->setParameter('race', $filterRace);
         }
-
+    
         $rapportsVeterinaire = $qbVet->getQuery()->getResult();
-
+    
         // Récupération des labels de races d'animaux pour le formulaire de tri
         $races = $entityManager->createQuery('SELECT DISTINCT rac.label FROM App\Entity\Animal a JOIN a.race rac')
             ->getScalarResult();
-
+    
         return $this->render('employee/dashboard.html.twig', [
             'form' => $form->createView(),
             'avisNonValides' => $avisNonValides,
             'rapportsEmploye' => $rapportsEmploye,
             'rapportsVeterinaire' => $rapportsVeterinaire,
-            'races' => array_column($races, 'label'),  // 'label' est le champ retourné par la requête DQL
+            'races' => array_column($races, 'label'), 
         ]);
     }
 }

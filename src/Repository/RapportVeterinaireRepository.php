@@ -20,18 +20,17 @@ class RapportVeterinaireRepository extends ServiceEntityRepository
             ->select('r, a');
 
         if ($animal) {
-            $queryBuilder->andWhere('a.animal_id = :animal')
+            $queryBuilder->andWhere('a.id = :animal')  
                 ->setParameter('animal', $animal);
         }
 
         if ($date) {
-            $queryBuilder->andWhere('r.date = :date')
+            $queryBuilder->andWhere('DATE(r.date) = :date')  
                 ->setParameter('date', $date);
         }
 
         return $queryBuilder->getQuery()->getResult();
     }
-
     public function countConsultationsByAnimal()
     {
         return $this->createQueryBuilder('r')

@@ -25,8 +25,8 @@ class HabitatType extends AbstractType
             ])
             ->add('imageFile', FileType::class, [
                 'label' => 'Image',
-                'mapped' => false, // Important, car nous gérons le fichier séparément
-                'required' => false, // Ce champ n'est pas obligatoire
+                'mapped' => false, 
+                'required' => false, 
             ]);
     }
 

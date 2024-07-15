@@ -1,6 +1,6 @@
 <?php
 
-// src/Entity/Utilisateur.php
+
 
 namespace App\Entity;
 
@@ -110,13 +110,13 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getSalt(): ?string
     {
-        // Pas nécessaire pour l'encodeur bcrypt
+        
         return null;
     }
 
     public function eraseCredentials()
     {
-        // Si tu stockes des données temporaires, vide ici
+       
     }
 
     public function getUserIdentifier(): string
