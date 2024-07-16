@@ -59,4 +59,4 @@ nelmio_security:
             form-action:
                 - "'self'"
             frame-src:
-                - "'none'"
+                - "https://www.google.com/"
