@@ -1,0 +1,29 @@
+# Le nom de l'application. Doit être unique dans le projet.
+name: zood-arcadia
+
+# Le type de l'application. Définit l'image de conteneur de base utilisée.
+type: 'php:8.3'
+
+# La taille du disque persistant pour l'application. La valeur est en GiB.
+storage: 5
+
+# La taille de la mémoire vive (RAM) allouée à l'application. (Non obligatoire pour le plan gratuit)
+web:
+  # Le répertoire racine des documents de l'application.
+  document_root: public
+  # La commande pour démarrer le serveur web.
+  commands:
+    start: |
+      php bin/console server:run 0.0.0.0:8080 --no-tls
+
+# Les relations avec les services, comme une base de données MySQL.
+relationships:
+  database: "db:mysql:8.0"
+
+# Les hooks pour exécuter des commandes supplémentaires après le déploiement.
+hooks:
+  deploy:
+    # Migrations de base de données.
+    - php bin/console doctrine:migrations:migrate --no-interaction
+    # Nettoyage du cache Symfony.
+    - php bin/console cache:clear
