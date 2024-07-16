@@ -1,47 +1,12 @@
+/*
+ * Welcome to your app's main JavaScript file!
+ *
+ * We recommend including the built version of this JavaScript file
+ * (and its CSS file) in your base layout (base.html.twig).
+ */
 
-document.addEventListener('DOMContentLoaded', function () {
-    const modals = document.querySelectorAll('.modal');
-    const closeButtons = document.querySelectorAll('.close-btn');
-    const overlay = document.querySelectorAll('.modal-overlay');
+// any CSS you import will output into a single css file (app.css in this case)
+import './styles/app.css';
 
-    document.querySelectorAll('[data-toggle="modal"]').forEach(button => {
-        button.addEventListener('click', function () {
-            const modalId = this.getAttribute('data-target');
-            document.getElementById(modalId).style.display = 'block';
-        });
-    });
-
-    closeButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            this.closest('.modal').style.display = 'none';
-        });
-    });
-
-    overlay.forEach(over => {
-        over.addEventListener('click', function () {
-            this.closest('.modal').style.display = 'none';
-        });
-    });
-});
-
-function handleClick(animalPrenom) {
-    fetch(`?animalPrenom=${animalPrenom}`, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-        },
-    })
-    .then(response => response.json())
-    .then(data => console.log('Click enregistré:', data))
-    .catch(error => console.error('Erreur:', error));
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const burgerMenu = document.querySelector('.burger-menu');
-    const navbar = document.querySelector('.navbar');
-
-    burgerMenu.addEventListener('click', () => {
-        burgerMenu.classList.toggle('open');
-        navbar.classList.toggle('open');
-    });
-});
+// start the Stimulus application
+import './bootstrap';
