@@ -23,5 +23,9 @@
     "dependencies": {
         "@popperjs/core": "^2.11.8",
         "bootstrap": "^5.3.3"
-    }
+    },
+    "engines": {
+        "node": "v20.11.1",
+        "yarn": "1.22.22"
+}
 }
