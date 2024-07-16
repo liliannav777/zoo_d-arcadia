@@ -8,10 +8,6 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-.dockerignore
-.github/workflows/fly-deploy.yml
-Dockerfile
-fly.toml
 ###> phpunit/phpunit ###
 /phpunit.xml
 .phpunit.result.cache
