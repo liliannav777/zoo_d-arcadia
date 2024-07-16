@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: Symfony App
+    env: php
+    buildCommand: |
+      # Installer les dépendances PHP
+      composer install --no-dev --optimize-autoloader
+
+      # Installer les dépendances front-end et compiler les assets
+      yarn install
+      yarn encore production
+
+    startCommand: |
+      # Démarrer le serveur Symfony
+      symfony server:start --no-tls --port 80 --host 0.0.0.0
+
+    plan: free
+    region: fra
+    instances: 1
