@@ -96,7 +96,6 @@ class EmployeeController extends AbstractController
         
         $form->handleRequest($request);
 
-        dd($form->getData());
 
         
         if ($form->isSubmitted() && $form->isValid()) {
