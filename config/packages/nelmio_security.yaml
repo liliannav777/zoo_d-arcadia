@@ -56,8 +56,5 @@ nelmio_security:
                 - "'none'"
             base-uri:
                 - "'self'"
-            form-action:
-                - "'self'"
-                - "https://arcane-peak-89557-1b8ef9e04fef.herokuapp.com"
             frame-src:
                 - "https://www.google.com/"
