@@ -11,8 +11,8 @@ class MongoDBService
 
     public function __construct()
     {
-        $mongodbUri = $_ENV['MONGODB_URI'] ?? null; // Utilise `MONGODB_URI`
-        $mongodbDatabase = $_ENV['MONGODB_DATABASE'] ?? null; // Utilise `MONGODB_DATABASE`
+        $mongodbUri = $_ENV['MONGODB_URI'] ?? null;
+        $mongodbDatabase = $_ENV['MONGODB_DATABASE'] ?? null;
 
         if (!$mongodbUri) {
             throw new Exception('L\'URI MongoDB n\'est pas défini dans les variables d\'environnement.');
@@ -25,7 +25,7 @@ class MongoDBService
         try {
             $this->client = new Client($mongodbUri);
             $this->database = $this->client->selectDatabase($mongodbDatabase);
-            $this->client->listDatabases(); // Vérifie la connexion
+            $this->client->listDatabases();
         } catch (\Exception $e) {
             error_log("Erreur lors de la connexion à MongoDB Atlas : " . $e->getMessage());
             throw new Exception("Erreur lors de la connexion à MongoDB Atlas : " . $e->getMessage());
