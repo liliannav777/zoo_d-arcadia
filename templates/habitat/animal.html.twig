@@ -27,7 +27,7 @@
                      data-race="{{ animal.getRaceName() }}"
                      data-etat="{{ animal.getEtat() }}"
                      data-rapports="{{ animal.rapportVeterinaireJson|raw }}"
-                     onclick="handleClick('{{ animal.prenom }}')"> <!-- Appelle handleClick avec le prénom de l'animal -->
+                     onclick="handleClick('{{ animal.prenom }}')">>
                 <h3>{{ animal.prenom }}</h3>
                 <p>{{ animal.getRaceName() }}</p>
                 <p>{{ animal.getEtat() }}</p>
