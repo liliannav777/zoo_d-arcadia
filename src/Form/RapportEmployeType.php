@@ -35,8 +35,8 @@ class RapportEmployeType extends AbstractType
             ])
             ->add('date', DateType::class, [
                 'widget' => 'single_text',
-                'label' => 'Date',
-                'attr' => ['class' => 'form-control'],
+                'label' => 'Date de Passage',
+                'required' => true,
             ]);
     }
 

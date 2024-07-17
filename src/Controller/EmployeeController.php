@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace App\Controller;
 
 use App\Entity\RapportEmploye;
@@ -65,8 +63,10 @@ class EmployeeController extends AbstractController
                 ->setParameter('race', $filterRace);
         }
     
-        $rapportsEmploye = new RapportEmploye();
-        $rapportId = $request->request->get('rapport_id');
+        $rapportsEmploye = $qb->getQuery()->getResult();
+    
+        $rapportEmploye = new RapportEmploye();
+        $rapportId = $request->query->get('rapport_id');
         
         // Vérifie si l'ID du rapport est spécifié
         if ($rapportId) {
@@ -74,48 +74,14 @@ class EmployeeController extends AbstractController
             if (!$rapportEmploye) {
                 throw $this->createNotFoundException('Le rapport n\'existe pas.');
             }
-        } else {
-            // Traite le formulaire de manière classique pour ajouter un rapport
-            if ($request->isMethod('POST')) {
-                $formData = $request->request->get('rapport_employe');
-                $rapportId = $formData['id'] ?? null;
-                if ($rapportId) {
-                    $rapportEmploye = $rapportEmployeRepository->find($rapportId);
-                    if (!$rapportEmploye) {
-                        throw $this->createNotFoundException('Le rapport n\'existe pas.');
-                    }
-                }
-            }
         }
         
         // Création du formulaire avec l'entité rapportEmploye
         $form = $this->createForm(RapportEmployeType::class, $rapportEmploye, [
             'method' => 'POST',
-            'action' => $this->generateUrl('employee'),
+            'action' => $this->generateUrl('employee', ['rapport_id' => $rapportId]),
         ]);
         
-        $form->handleRequest($request);
-
-
-        
-        if ($form->isSubmitted() && $form->isValid()) {
-            $rapportEmploye = $form->getData();
-            $rapportEmploye->setEmploye($this->getUser());
-        
-            if ($rapportEmploye->getId()) {
-                // Mise à jour du rapport existant
-                $this->addFlash('success', 'Le rapport a été modifié avec succès.');
-            } else {
-                // Ajout d'un nouveau rapport
-                $entityManager->persist($rapportEmploye);
-                $this->addFlash('success', 'Le rapport a été ajouté avec succès.');
-            }
-        
-            $entityManager->flush();
-            return $this->redirectToRoute('employee');
-        }
-
-        // Gestion des données du formulaire pour ajouter ou modifier un rapport
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -153,15 +119,14 @@ class EmployeeController extends AbstractController
                     $entityManager->flush();
                 }
             } elseif ($action === 'delete') {
-                $rapport = $rapportEmployeRepository->find($request->request->get('rapport_id'));
-                if ($rapport) {
-                    $entityManager->remove($rapport);
-                    $this->addFlash('success', 'Rapport supprimé avec succès.');
+                $rapportId = $request->request->get('rapport_id');
+                $rapportEmploye = $rapportEmployeRepository->find($rapportId);
+                if ($rapportEmploye) {
+                    $entityManager->remove($rapportEmploye);
+                    $this->addFlash('success', 'Le rapport a été supprimé avec succès.');
                     $entityManager->flush();
                 }
                 return $this->redirectToRoute('employee');
-            } elseif ($action === 'edit') {
-                
             }
         }
 
