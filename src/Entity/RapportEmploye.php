@@ -16,8 +16,8 @@ class RapportEmploye
     #[ORM\JoinColumn(nullable: false, name: 'animal_id', referencedColumnName: 'animal_id')]
     private ?Animal $animal = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private \DateTimeInterface $date;
+    #[ORM\Column(type: 'date')]
+    private $date;
 
     #[ORM\Column(type: 'string', length: 100)]
     private string $nourriture;

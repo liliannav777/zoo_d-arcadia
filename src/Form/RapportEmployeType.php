@@ -1,18 +1,15 @@
 <?php
 
-
 namespace App\Form;
 
 use App\Entity\RapportEmploye;
 use App\Entity\Animal;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RapportEmployeType extends AbstractType
@@ -24,16 +21,21 @@ class RapportEmployeType extends AbstractType
                 'class' => Animal::class,
                 'choice_label' => 'prenom',
                 'placeholder' => 'Choisir un animal',
+                'label' => 'Animal',
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('nourriture', TextType::class, [
                 'label' => 'Nourriture',
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('quantite', TextType::class, [
-                'label' => 'Quantité',
+                'label' => 'Quantité (en kg)',
+                'attr' => ['class' => 'form-control'],
             ])
-            ->add('date', DateType::class, [
+            ->add('date', DateTimeType::class, [
                 'widget' => 'single_text',
                 'label' => 'Date',
+                'attr' => ['class' => 'form-control'],
             ]);
     }
 
