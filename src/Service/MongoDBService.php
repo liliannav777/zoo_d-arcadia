@@ -2,6 +2,7 @@
 namespace App\Service;
 
 use MongoDB\Client;
+use Exception;
 
 class MongoDBService
 {
@@ -10,20 +11,24 @@ class MongoDBService
 
     public function __construct()
     {
-        $mongodbUri = $_ENV['MONGODB_URI']; // URI pour la connexion
-        $mongodbDatabase = $_ENV['MONGODB_DATABASE']; // Nom de la base de données
+        $mongodbUri = $_ENV['MONGODB_URI'] ?? null; // Utilise `MONGODB_URI`
+        $mongodbDatabase = $_ENV['MONGODB_DATABASE'] ?? null; // Utilise `MONGODB_DATABASE`
 
-        // Connexion à MongoDB Atlas
-        $this->client = new Client($mongodbUri);
-        $this->database = $this->client->selectDatabase($mongodbDatabase);
+        if (!$mongodbUri) {
+            throw new Exception('L\'URI MongoDB n\'est pas défini dans les variables d\'environnement.');
+        }
 
-        // Optionnel : Vérifier la connexion
+        if (!$mongodbDatabase) {
+            throw new Exception('Le nom de la base de données MongoDB n\'est pas défini dans les variables d\'environnement.');
+        }
+
         try {
-            $this->client->listDatabases(); // Exemple de requête pour vérifier la connexion
-            echo "Connexion réussie à MongoDB Atlas avec la base de données : $mongodbDatabase";
+            $this->client = new Client($mongodbUri);
+            $this->database = $this->client->selectDatabase($mongodbDatabase);
+            $this->client->listDatabases(); // Vérifie la connexion
         } catch (\Exception $e) {
             error_log("Erreur lors de la connexion à MongoDB Atlas : " . $e->getMessage());
-            throw new \Exception("Erreur lors de la connexion à MongoDB Atlas : " . $e->getMessage());
+            throw new Exception("Erreur lors de la connexion à MongoDB Atlas : " . $e->getMessage());
         }
     }
 
