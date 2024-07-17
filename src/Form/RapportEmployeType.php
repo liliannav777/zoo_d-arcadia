@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RapportEmployeType extends AbstractType
@@ -28,11 +29,11 @@ class RapportEmployeType extends AbstractType
                 'label' => 'Nourriture',
                 'attr' => ['class' => 'form-control'],
             ])
-            ->add('quantite', TextType::class, [
+            ->add('quantite', NumberType::class, [
                 'label' => 'Quantité (en kg)',
                 'attr' => ['class' => 'form-control'],
             ])
-            ->add('date', DateTimeType::class, [
+            ->add('date', DateType::class, [
                 'widget' => 'single_text',
                 'label' => 'Date',
                 'attr' => ['class' => 'form-control'],

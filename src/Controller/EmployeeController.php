@@ -65,19 +65,17 @@ class EmployeeController extends AbstractController
                 ->setParameter('race', $filterRace);
         }
     
-        $rapportsEmploye = $qb->getQuery()->getResult();
-    
-        // Création du formulaire pour ajouter ou modifier un rapport d'employé
-        $rapportEmploye = new RapportEmploye();
+        $rapportsEmploye = new RapportEmploye();
         $rapportId = $request->request->get('rapport_id');
-
+        
+        // Vérifie si l'ID du rapport est spécifié
         if ($rapportId) {
             $rapportEmploye = $rapportEmployeRepository->find($rapportId);
             if (!$rapportEmploye) {
                 throw $this->createNotFoundException('Le rapport n\'existe pas.');
             }
         } else {
-            // On vérifie si l'utilisateur a soumis un formulaire sans spécifier un ID
+            // Traite le formulaire de manière classique pour ajouter un rapport
             if ($request->isMethod('POST')) {
                 $formData = $request->request->get('rapport_employe');
                 $rapportId = $formData['id'] ?? null;
@@ -89,11 +87,34 @@ class EmployeeController extends AbstractController
                 }
             }
         }
-
+        
+        // Création du formulaire avec l'entité rapportEmploye
         $form = $this->createForm(RapportEmployeType::class, $rapportEmploye, [
             'method' => 'POST',
             'action' => $this->generateUrl('employee'),
         ]);
+        
+        $form->handleRequest($request);
+
+        dd($form->getData());
+
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $rapportEmploye = $form->getData();
+            $rapportEmploye->setEmploye($this->getUser());
+        
+            if ($rapportEmploye->getId()) {
+                // Mise à jour du rapport existant
+                $this->addFlash('success', 'Le rapport a été modifié avec succès.');
+            } else {
+                // Ajout d'un nouveau rapport
+                $entityManager->persist($rapportEmploye);
+                $this->addFlash('success', 'Le rapport a été ajouté avec succès.');
+            }
+        
+            $entityManager->flush();
+            return $this->redirectToRoute('employee');
+        }
 
         // Gestion des données du formulaire pour ajouter ou modifier un rapport
         $form->handleRequest($request);
