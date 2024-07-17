@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Role;
 use App\Entity\Utilisateur;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -32,10 +33,16 @@ class UserCreationFormType extends AbstractType
             ->add('nom', null, ['label' => 'Nom'])
             ->add('prenom', null, ['label' => 'Prénom'])
             ->add('password', PasswordType::class, ['label' => 'Mot de Passe'])
-            ->add('role', ChoiceType::class, [
-                'choices' => $choices,
-                'label' => 'Rôle',
+            ->add('role', EntityType::class, [
+                'class' => Role::class,
+                'choice_label' => 'label',  // Affiche le label du rôle
                 'placeholder' => 'Choisir un rôle',
+                'label' => 'Rôle',
+                'query_builder' => function($repo) {
+                    return $repo->createQueryBuilder('r')
+                        ->where('r.label IN (:roles)')
+                        ->setParameter('roles', ['ROLE_EMPLOYE', 'ROLE_VETERINAIRE']);
+                },
             ]);
     }
 
