@@ -10,8 +10,7 @@
 ###< symfony/framework-bundle ###
 backup.sql
 heroku
-webpack.config.js
-Prockfile
+Procfile
 yarn.lock
 ###> phpunit/phpunit ###
 /phpunit.xml

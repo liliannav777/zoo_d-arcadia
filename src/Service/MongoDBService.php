@@ -8,10 +8,10 @@ class MongoDBService
     private $client;
     private $database;
 
-    public function __construct(string $mongodbUri, string $mongodbDatabase)
+    public function __construct(string $mongodbUrl, string $mongodbDatabase)
     {
-        // Crée un client MongoDB avec l'URI fournie
-        $this->client = new Client($mongodbUri);
+        // Crée un client MongoDB avec l'URL fournie
+        $this->client = new Client($mongodbUrl);
 
         // Sélectionne la base de données
         $this->database = $this->client->selectDatabase($mongodbDatabase);

@@ -21,7 +21,7 @@ class Habitat
     #[ORM\Column(type: 'text')]
     private $description;
 
-    #[ORM\Column(type: 'string', length: 50)]
+    #[ORM\Column(type: 'string', length: 50, nullable:true)]
     private ?string $commentaire_habitat = null;
 
     #[ORM\OneToMany(mappedBy: 'habitat', targetEntity: Animal::class)]

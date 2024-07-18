@@ -27,6 +27,6 @@ services:
 
     App\Service\MongoDBService:
         arguments:
-            - '%env(MONGODB_URI)%'
+            - '%env(MONGODB_URL)%'
             - '%env(MONGODB_DATABASE)%'
 
