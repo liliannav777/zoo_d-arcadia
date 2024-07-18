@@ -17,10 +17,12 @@
         <ul class="list-group">
             {% for avis in avisNonValides %}
                 <li class="list-group-item">
-                    {{ avis.commentaire }}
+                    <h3>{{ avis.pseudo }}</h3>
+                    <p>{{ avis.note }} étoile(s)</p>
+                    <p>{{ avis.commentaire }}</p>
                     <form method="post" action="{{ path('employee') }}" style="display:inline;">
-                        <input type="hidden" name="avis_id" value="{{ avis.id }}">
-                        <button type="submit" name="action" value="validate" class="btn btn-success">Valider</button>
+                        <input type="hidden" name="avis_id" value="{{ avis.avisid }}">
+                        <button type="submit" name="action" value="validate" class="btn btn-primary">Valider</button>
                         <button type="submit" name="action" value="delete" class="btn btn-danger">Supprimer</button>
                     </form>
                 </li>

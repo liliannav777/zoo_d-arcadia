@@ -1,1 +1,0 @@
-# zoo_d-arcadia
