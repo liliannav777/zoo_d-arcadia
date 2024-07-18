@@ -8,6 +8,11 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+backup.sql
+heroku
+webpack.config.js
+Prockfile
+yarn.lock
 ###> phpunit/phpunit ###
 /phpunit.xml
 .phpunit.result.cache
