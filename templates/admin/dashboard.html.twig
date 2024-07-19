@@ -6,7 +6,7 @@
 <div id="hero" class="hero-section">
     <img src="{{ asset('assets/styles/images/animals/baby-snow-leopard-8132690_1280.webp') }}" alt="Description de l'image">
     <div class="hero-content">
-        <h1>Espace Administrateur</h1>
+        <h1>Tableau de bord Administrateur</h1>
     </div>
 </div>
 <div class="dashboard">
@@ -109,7 +109,7 @@
             <tbody>
                 {% for click in clicks %}
                     <tr>
-                        <td>{{ click.animalPrenom }}</td>
+                        <td><strong>{{ click.animalPrenom }}</strong></td>
                         <td>{{ click.clickCount }}</td>
                     </tr>
                 {% endfor %}

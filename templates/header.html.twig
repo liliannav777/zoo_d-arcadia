@@ -35,7 +35,7 @@
                     <li><a href="{{ path('contact') }}" class="{{ app.request.attributes.get('_route') == 'contact' ? 'active' : '' }}">Contact</a></li>
                     {% if app.user %}
                     {% if is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('admin') }}" class="{{ app.request.attributes.get('_route') == 'admin_dashboard' ? 'active' : '' }}">Espace Administrateur</a></li>
+                        <li><a href="{{ path('admin') }}" class="{{ app.request.attributes.get('_route') == 'admin_dashboard' ? 'active' : '' }}">Tableau de bord Administrateur</a></li>
                     {% endif %}
                     {% if is_granted('ROLE_EMPLOYE') %}
                         <li><a href="{{ path('employee') }}">Tableau de Bord Employé</a></li>
