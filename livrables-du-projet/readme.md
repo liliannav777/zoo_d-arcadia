@@ -51,7 +51,7 @@ npm run dev
 7. **Lancement de l'application:**
 Démarrez le serveur Symfony : Utilisez la commande suivante pour démarrer le serveur Symfony intégré :
 
-php bin/console server:run
+symfony server:start
 
 Cela lancera le serveur de développement Symfony. Par défaut, il sera accessible à l'adresse http://localhost:8000 dans votre navigateur.
 
